@@ -31,6 +31,6 @@ namespace NewsEngine2._0.Models
             return new ApplicationDbContext();
         }
 
-        DbSet<News> News { get; set; }
+        public DbSet<News> News { get; set; }
     }
 }
