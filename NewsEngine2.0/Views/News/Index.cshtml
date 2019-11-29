@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Content</th>
+        <th>Created Date</th>
+    </tr>
+ @foreach(NewsEngine2._0.Models.News news in ViewBag.News)
+ {
+     <tr>
+         <td>@news.Title</td>
+         <td>@news.Content</td>
+         <td>@news.CreateDate</td>
+     </tr>
+ }
+</table>
+
+<a href="/News/New">Adaugare Stire</a>
+
