@@ -10,11 +10,11 @@ namespace NewsEngine2._0.Models
     {
         [Key]
         public int MediaId { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Calea fisierului media este obligatorie")]
         public string FilePath { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Strirea asociata fisierului media este obligatoriu")]
         public int NewsId { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Fisierul Media trebuie sa aiba un tip")]
         public int MediaTypeId { get; set; }
 
         public News News { get; set; }

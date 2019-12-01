@@ -10,7 +10,7 @@ namespace NewsEngine2._0.Models
     {
         [Key]
         public int CategoryId { get; set;}
-        [Required]
+        [Required(ErrorMessage ="Numele categoriei este obligatoriu")]
         public string Name { get; set; }
 
         public ICollection<News> News { get; set; }

@@ -16,11 +16,11 @@ namespace NewsEngine2._0.Models
         public string Content { get; set; }
         public DateTime CreateDate { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         [Required(ErrorMessage ="Categoria este obligatorie")]
         public int CategoryId { get; set; } 
         public bool IsActive { get; set; }
-        public User User { get; set; }
+        public ApplicationUser User { get; set; }
         public Category Category { get; set; }
     }
 }
