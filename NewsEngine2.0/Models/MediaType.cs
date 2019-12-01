@@ -10,7 +10,7 @@ namespace NewsEngine2._0.Models
     {
         [Key]
         public int MediaTypeId { get; set; }
-        [Required(ErrorMessage ="Numele tipului de fisier trebuie specificat")];
+        [Required(ErrorMessage ="Numele tipului de fisier trebuie specificat")]
         public string Name { get; set; }
 
         public ICollection<Media> Media { get; set; }
