@@ -14,24 +14,33 @@ namespace NewsEngine2._0.Controllers
         
 
         // GET: News
+        
         public ActionResult Index()
         {
             ViewBag.News = db.News.Include("User").Include("Category");
+            if(TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            
             return View();
         }
 
+ 
         public ActionResult Show(int id)
         {
             News news = db.News.Find(id);
             return View(news);
         }
 
+        [Authorize (Roles = "Administrator,Editor")]
         public ActionResult New()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize (Roles ="Administrator,Editor")]
         public ActionResult New(News news)
         {
             try
@@ -53,12 +62,14 @@ namespace NewsEngine2._0.Controllers
             }
         }
 
+        [Authorize (Roles ="Administrator,Editor")]
         public ActionResult Edit(int id)
         {
             News news = db.News.Find(id);
             return View(news);
         }
 
+        [Authorize (Roles ="Administrator,Editor")]
         [HttpPut]
         public ActionResult Edit(News editedNews)
         {
@@ -89,6 +100,7 @@ namespace NewsEngine2._0.Controllers
         }
 
         [HttpDelete]
+        [Authorize (Roles = "Administrator,Editor")]
         public ActionResult Delete(int id)
         {
             News news = db.News.Find(id);
