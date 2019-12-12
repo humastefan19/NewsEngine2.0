@@ -29,7 +29,6 @@ namespace NewsEngine2._0.Controllers
         {
             ApplicationUser user = db.Users.Find(id);
             return View(user);
-
         }
 
         public ActionResult Edit(int id)

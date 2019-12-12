@@ -19,6 +19,8 @@ namespace NewsEngine2._0.Models
         public string Content { get; set; }
         [Required]
         public int CategoryId { get; set; }
+        [DataType(DataType.DateTime, ErrorMessage = "Campul trebuie sa contina data si ora")]
+        public DateTime CreatedDate { get; set; }
 
         public ApplicationUser User { get; set; }
         public Category Category { get; set; }
