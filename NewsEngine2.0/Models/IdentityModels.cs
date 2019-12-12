@@ -33,6 +33,7 @@ namespace NewsEngine2._0.Models
 
         public DbSet<News> News { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<Media> Media { get; set; }
         public DbSet<MediaType> MediaTypes { get; set; }
     }
