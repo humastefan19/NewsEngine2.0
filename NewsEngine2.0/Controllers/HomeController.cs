@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NewsEngine2._0.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,8 +9,19 @@ namespace NewsEngine2._0.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
+        //protected override void Initialize(System.Web.Routing.RequestContext requestContext)
+        //{
+        //    base.Initialize(requestContext);
+        //    ViewData["Category"] = GetAllCategories();
+
+        //}
+
+         
         public ActionResult Index()
         {
+            ViewBag.First = db.News.OrderBy(x => x.CreateDate).FirstOrDefault();
+            ViewBag.Four = db.News.OrderBy(x => x.CreateDate).Skip(1).Take(4);
             return View();
         }
 
@@ -25,6 +37,31 @@ namespace NewsEngine2._0.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllCategories()
+        {
+            // generam o lista goala
+            var selectList = new List<SelectListItem>();
+
+            // Extragem toate categoriile din baza de date
+            var categories = from cat in db.Categories
+                             select cat;
+
+            // iteram prin categorii
+            foreach (var category in categories)
+            {
+                // Adaugam in lista elementele necesare pentru dropdown
+                selectList.Add(new SelectListItem
+                {
+                    Value = category.CategoryId.ToString(),
+                    Text = category.Name.ToString()
+                });
+            }
+
+            // returnam lista de categorii
+            return selectList;
         }
     }
 }

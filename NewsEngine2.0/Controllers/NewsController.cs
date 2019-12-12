@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNet.Identity;
 using NewsEngine2._0.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace NewsEngine2._0.Controllers
         
         public ActionResult Index()
         {
-            ViewBag.News = db.News.Include("User").Include("Category");
+            ViewBag.News = db.News.Include("User").Include("Category").OrderBy(x => x.CreateDate);
             if(TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
@@ -31,13 +32,22 @@ namespace NewsEngine2._0.Controllers
         public ActionResult Show(int id)
         {
             News news = db.News.Find(id);
+            news.Comments = GetAllComments(news.NewsId);
             return View(news);
         }
 
         [Authorize (Roles = "Administrator,Editor")]
         public ActionResult New()
         {
-            return View();
+            News news = new News();
+
+            news.CreateDate = DateTime.Today;
+            news.UserId = User.Identity.GetUserId();
+            news.Categories = GetAllCategories();
+
+            return View(news);
+
+
         }
 
         [HttpPost]
@@ -50,6 +60,7 @@ namespace NewsEngine2._0.Controllers
                 {
                     db.News.Add(news);
                     db.SaveChanges();
+                    TempData["message"] = "Articolul a fost adaugat";
                     return RedirectToAction("Index");
                 }
                 else
@@ -57,7 +68,7 @@ namespace NewsEngine2._0.Controllers
                     return View(news);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View(news);
             }
@@ -67,27 +78,49 @@ namespace NewsEngine2._0.Controllers
         public ActionResult Edit(int id)
         {
             News news = db.News.Find(id);
-            return View(news);
+            ViewBag.news = news;
+            news.Categories = GetAllCategories();
+            if(news.UserId == User.Identity.GetUserId() || User.IsInRole("Adminisitrator"))
+            {
+                return View(news);
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul de a edita articolul";
+                return RedirectToAction("Index");
+            }
+            
         }
 
         [Authorize (Roles ="Administrator,Editor")]
         [HttpPut]
         public ActionResult Edit(News editedNews)
         {
+            editedNews.Categories = GetAllCategories();
             try
             {
                 if (ModelState.IsValid)
                 {
                     News newsToEdit = db.News.Find(editedNews.NewsId);
-                    if (TryUpdateModel(newsToEdit))
+                    if(newsToEdit.UserId == User.Identity.GetUserId() ||
+                        User.IsInRole("Administrator"))
                     {
-                        newsToEdit.Title = editedNews.Title;
-                        newsToEdit.Content = editedNews.Content;
-                        newsToEdit.CategoryId = editedNews.CategoryId;
+                        if (TryUpdateModel(newsToEdit))
+                        {
+                            newsToEdit.Title = editedNews.Title;
+                            newsToEdit.Content = editedNews.Content;
+                            newsToEdit.CategoryId = editedNews.CategoryId;
 
-                        db.SaveChanges();
+                            db.SaveChanges();
+                        }
+                        return RedirectToAction("Index");
                     }
-                    return RedirectToAction("Index");
+                    else
+                    {
+                        TempData["message"] = "Nu aveti dreptul sa faceti modificari asupra unui articol care nu va apartine!";
+                        return RedirectToAction("Index");
+                    }
+
                 }
                 else
                 {
@@ -105,9 +138,19 @@ namespace NewsEngine2._0.Controllers
         public ActionResult Delete(int id)
         {
             News news = db.News.Find(id);
-            db.News.Remove(news);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if(news.UserId == User.Identity.GetUserId() ||
+                User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            {
+                db.News.Remove(news);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["message"] = "Nu aveti dreptul sa stergeti un articol care nu va apartine!";
+                return RedirectToAction("Index");
+            }
+
         }
 
         [NonAction]
@@ -126,5 +169,55 @@ namespace NewsEngine2._0.Controllers
             }
             return selectList;
         }
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllCategories()
+        {
+            // generam o lista goala
+            var selectList = new List<SelectListItem>();
+
+            // Extragem toate categoriile din baza de date
+            var categories = from cat in db.Categories
+                             select cat;
+
+            // iteram prin categorii
+            foreach (var category in categories)
+            {
+                // Adaugam in lista elementele necesare pentru dropdown
+                selectList.Add(new SelectListItem
+                {
+                    Value = category.CategoryId.ToString(),
+                    Text = category.Name.ToString()
+                });
+            }
+
+            // returnam lista de categorii
+            return selectList;
+        }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllComments(int newsId)
+        {
+            // generam o lista goala
+            var selectList = new List<SelectListItem>();
+
+            // Extragem toate categoriile din baza de date
+            var comments = db.Comments.Where(x => x.NewsId == newsId);
+
+            // iteram prin categorii
+            foreach (var comment in comments)
+            {
+                // Adaugam in lista elementele necesare pentru dropdown
+                selectList.Add(new SelectListItem
+                {
+                    Value = comment.CommentId.ToString(),
+                    Text = comment.Content.ToString()
+                });
+            }
+
+            // returnam lista de categorii
+            return selectList;
+        }
+
+
     }
 }
