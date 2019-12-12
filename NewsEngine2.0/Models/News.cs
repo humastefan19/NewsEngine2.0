@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NewsEngine2._0.Dto.Media;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,6 +26,8 @@ namespace NewsEngine2._0.Models
         public Category Category { get; set; }
 
         public IEnumerable<SelectListItem> Categories { get; set; }
+        public IEnumerable<SelectListItem> Comments { get; set; }
+        public IEnumerable<MediaDto> Media { get; set; }
     }
 
 }

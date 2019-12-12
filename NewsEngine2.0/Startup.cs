@@ -4,6 +4,7 @@ using Microsoft.Owin;
 using NewsEngine2._0.Models;
 using Owin;
 using System.Data;
+using System.Linq;
 
 [assembly: OwinStartupAttribute(typeof(NewsEngine2._0.Startup))]
 namespace NewsEngine2._0
@@ -14,6 +15,33 @@ namespace NewsEngine2._0
         {
             ConfigureAuth(app);
             createAdminUserAndApplicationRoles();
+            mediaTypes();
+        }
+
+        private void mediaTypes()
+        {
+            ApplicationDbContext db = new ApplicationDbContext();
+            var image = db.MediaTypes.Where(x => x.Name.Contains("Image")).FirstOrDefault();
+            var video = db.MediaTypes.Where(x => x.Name.Contains("Video")).FirstOrDefault();
+
+            if (image == null)
+            {
+                MediaType imageType = new MediaType
+                {
+                    Name = "Image"
+                };
+                db.MediaTypes.Add(imageType);
+                db.SaveChanges();
+            }
+            if(video == null)
+            {
+                MediaType videoType = new MediaType
+                {
+                    Name = "Video"
+                };
+                db.MediaTypes.Add(videoType);
+                db.SaveChanges();
+            }
         }
         private void createAdminUserAndApplicationRoles()
         {

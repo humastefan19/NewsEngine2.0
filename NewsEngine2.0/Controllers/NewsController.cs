@@ -31,6 +31,7 @@ namespace NewsEngine2._0.Controllers
         public ActionResult Show(int id)
         {
             News news = db.News.Find(id);
+            news.Comments = GetAllComments(news.NewsId);
             return View(news);
         }
 
@@ -66,7 +67,7 @@ namespace NewsEngine2._0.Controllers
                     return View(news);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View(news);
             }
@@ -191,5 +192,31 @@ namespace NewsEngine2._0.Controllers
             // returnam lista de categorii
             return selectList;
         }
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllComments(int newsId)
+        {
+            // generam o lista goala
+            var selectList = new List<SelectListItem>();
+
+            // Extragem toate categoriile din baza de date
+            var comments = db.Comments.Where(x => x.NewsId == newsId);
+
+            // iteram prin categorii
+            foreach (var comment in comments)
+            {
+                // Adaugam in lista elementele necesare pentru dropdown
+                selectList.Add(new SelectListItem
+                {
+                    Value = comment.CommentId.ToString(),
+                    Text = comment.Content.ToString()
+                });
+            }
+
+            // returnam lista de categorii
+            return selectList;
+        }
+
+
     }
 }
