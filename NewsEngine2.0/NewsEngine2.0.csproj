@@ -167,11 +167,16 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
+<<<<<<< HEAD
     <Compile Include="Controllers\ProposedNewsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+=======
+    <Compile Include="Dto\Media\MediaDto.cs" />
+>>>>>>> 6bef09f5513871781213befc4129b952754dfedb
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -249,8 +254,12 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Category\" />
+<<<<<<< HEAD
     <Folder Include="Views\ProposedNews\" />
     <Folder Include="Views\User\" />
+=======
+    <Folder Include="Views\Comment\" />
+>>>>>>> 6bef09f5513871781213befc4129b952754dfedb
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
