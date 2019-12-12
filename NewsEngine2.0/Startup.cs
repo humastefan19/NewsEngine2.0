@@ -43,7 +43,8 @@ namespace NewsEngine2._0
                 }
             } 
  
-            if (!roleManager.RoleExists("Editor"))            
+            if (!roleManager.RoleExists("+" +
+                ""))            
             {                 
                 var role = new IdentityRole();
                 role.Name = "Editor";                 
