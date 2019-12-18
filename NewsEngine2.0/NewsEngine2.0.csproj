@@ -171,18 +171,9 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-    <Compile Include="Controllers\ProposedNewsController.cs" />
-    <Compile Include="Controllers\UserController.cs" />
-=======
-    <Compile Include="Dto\Media\MediaDto.cs" />
->>>>>>> 6bef09f5513871781213befc4129b952754dfedb
-=======
     <Compile Include="Controllers\ProposedNewsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Dto\Media\MediaDto.cs" />
->>>>>>> ea3c7a09686110d3dded8150d9ffb7c75272cf75
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -256,22 +247,14 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\News\Index.cshtml" />
     <Content Include="Views\News\New.cshtml" />
+    <Content Include="Views\Category\New.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Category\" />
-<<<<<<< HEAD
-<<<<<<< HEAD
+    <Folder Include="Views\Comment\" />
     <Folder Include="Views\ProposedNews\" />
     <Folder Include="Views\User\" />
-=======
-    <Folder Include="Views\Comment\" />
->>>>>>> 6bef09f5513871781213befc4129b952754dfedb
-=======
-    <Folder Include="Views\ProposedNews\" />
-    <Folder Include="Views\User\" />
-    <Folder Include="Views\Comment\" />
->>>>>>> ea3c7a09686110d3dded8150d9ffb7c75272cf75
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

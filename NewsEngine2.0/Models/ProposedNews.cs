@@ -17,7 +17,7 @@ namespace NewsEngine2._0.Models
         public string Title { get; set; }
         [Required(ErrorMessage = "Nu ati introdus continutul")]
         public string Content { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Categoria este obligatorie")]
         public int CategoryId { get; set; }
         [DataType(DataType.DateTime, ErrorMessage = "Campul trebuie sa contina data si ora")]
         public DateTime CreatedDate { get; set; }

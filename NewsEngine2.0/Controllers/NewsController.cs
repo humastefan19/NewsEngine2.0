@@ -54,8 +54,12 @@ namespace NewsEngine2._0.Controllers
         [Authorize (Roles ="Administrator,Editor")]
         public ActionResult New(News news)
         {
+            news.CreateDate = DateTime.Today;
+            news.UserId = User.Identity.GetUserId();
+            news.Categories = GetAllCategories();
             try
             {
+                
                 if (ModelState.IsValid)
                 {
                     db.News.Add(news);
@@ -172,25 +176,18 @@ namespace NewsEngine2._0.Controllers
         [NonAction]
         public IEnumerable<SelectListItem> GetAllCategories()
         {
-            // generam o lista goala
+ 
             var selectList = new List<SelectListItem>();
-
-            // Extragem toate categoriile din baza de date
             var categories = from cat in db.Categories
                              select cat;
-
-            // iteram prin categorii
             foreach (var category in categories)
             {
-                // Adaugam in lista elementele necesare pentru dropdown
                 selectList.Add(new SelectListItem
                 {
                     Value = category.CategoryId.ToString(),
                     Text = category.Name.ToString()
                 });
             }
-
-            // returnam lista de categorii
             return selectList;
         }
 

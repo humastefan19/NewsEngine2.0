@@ -9,16 +9,6 @@ namespace NewsEngine2._0.Models
     public class MediaType
     {
         public int MediaTypeId { get; set; }
-<<<<<<< HEAD
-<<<<<<< HEAD
-        [Required(ErrorMessage ="Numele tipului de fisier trebuie specificat")]
-=======
-        [Required]
->>>>>>> 6bef09f5513871781213befc4129b952754dfedb
-=======
-
-        [Required]
->>>>>>> ea3c7a09686110d3dded8150d9ffb7c75272cf75
         public string Name { get; set; }
     }
 }
