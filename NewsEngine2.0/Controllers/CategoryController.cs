@@ -7,7 +7,7 @@ using System.Web.Mvc;
 
 namespace NewsEngine2._0.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    //[Authorize(Roles = "Administrator")]
     public class CategoryController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

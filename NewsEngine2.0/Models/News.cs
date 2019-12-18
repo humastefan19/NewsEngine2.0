@@ -17,7 +17,6 @@ namespace NewsEngine2._0.Models
         [Required(ErrorMessage = "Continutul este obligatoriu")]
         public string Content { get; set; }
         public DateTime CreateDate { get; set; }
-        [Required]
         public string UserId { get; set; }
         [Required(ErrorMessage ="Categoria este obligatorie")]
         public int CategoryId { get; set; } 

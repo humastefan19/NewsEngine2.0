@@ -8,7 +8,9 @@ namespace NewsEngine2._0.Models
 {
     public class Comment
     {
+        [Key]
         public int CommentId { get; set; }
+        
         public string UserId { get; set; }
         public int NewsId { get; set; }
         [Required (ErrorMessage ="Continutul comentariului este obligatoriu")]
