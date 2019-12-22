@@ -9,7 +9,6 @@ namespace NewsEngine2._0.Models
     public class MediaType
     {
         public int MediaTypeId { get; set; }
-        [Required]
         public string Name { get; set; }
     }
 }

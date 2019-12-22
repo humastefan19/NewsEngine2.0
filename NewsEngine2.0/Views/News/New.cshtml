@@ -19,9 +19,9 @@
 
     @Html.Hidden("CreateDate", DateTime.Now, new { @class = "form-control" })
 
-    @*<label>Selectati categoria</label>
+    <label>Selectati categoria</label>
     @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
-    <br />*@
+    <br />
 
     <button class="btn btn-sm btn-success" type="submit">Adauga articol</button>
 
