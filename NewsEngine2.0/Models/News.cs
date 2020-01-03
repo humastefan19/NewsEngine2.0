@@ -1,7 +1,8 @@
-﻿using NewsEngine2._0.Dto.Media;
+﻿using NewsEngine2._0.Dto.MediaDto;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -21,8 +22,9 @@ namespace NewsEngine2._0.Models
         [Required(ErrorMessage ="Categoria este obligatorie")]
         public int CategoryId { get; set; } 
         public bool IsActive { get; set; }
-        public ApplicationUser User { get; set; }
-        public Category Category { get; set; }
+      
+        public virtual ApplicationUser User { get; set; }
+        public virtual Category Category { get; set; }
 
         public IEnumerable<SelectListItem> Categories { get; set; }
         public IEnumerable<SelectListItem> Comments { get; set; }

@@ -12,17 +12,27 @@
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
+
         <div class="item active">
-            <p>dadadad</p>
+            <h2 class="text-center">@ViewBag.First.News.Title</h2>
+            <p class="text-center">@ViewBag.First.News.Content</p>
+            @if (ViewBag.First.Medias.Count > 0)
+            {
+            <img src="~/Images/@ViewBag.First.Medias[0].Path" />
+            }
         </div>
-
-        <div class="item">
-            <p>dadasdas</p>
-        </div>
-
-        <div class="item">
-            <p>dadadada</p>
-        </div>
+        @foreach (NewsEngine2._0.Dto.MediaDto.MediaDto article in ViewBag.Article)
+        {
+            <div class="item">
+                <h2 class="text-center">@article.News.Title</h2>
+                <p class="text-center">@article.News.Content</p>
+                @if (article.Medias.Count > 0)
+                {
+                <img src="~/Images/@article.Medias[0].Path" />
+                }
+            </div>
+        }
+        
     </div>
 
     <!-- Left and right controls -->

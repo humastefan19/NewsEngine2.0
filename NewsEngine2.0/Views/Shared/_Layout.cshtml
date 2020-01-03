@@ -24,27 +24,40 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     @*@if (ViewData.ContainsKey("Category") && ViewData["Category"]!=null)
-                    {
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categori <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            @foreach(var category in ViewData["Category"] as IEnumerable<NewsEngine2._0.Models.Category>)
-                            {
-                                <li>@Html.ActionLink(category.Name,"ShowNewsByCategory","News",category.CategoryId)</li>
-                            }
-                        </ul>
-                    </li>
-                    }*@
+        {
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categori <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                @foreach(var category in ViewData["Category"] as IEnumerable<NewsEngine2._0.Models.Category>)
+                {
+                    <li>@Html.ActionLink(category.Name,"ShowNewsByCategory","News",category.CategoryId)</li>
+                }
+            </ul>
+        </li>
+        }*@
                     @if (User.IsInRole("Administrator"))
                     {
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrator <span class="caret"></span></a>
-                        <ul class=" dropdown-menu">
-                            <li>@Html.ActionLink("New","News","Adaugare Articol")</li>
-                            <li>@Html.ActionLink("Index","User","Utilizatori")</li>
-                         
-                        </ul>
-                    </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrator <span class="caret"></span></a>
+                            <ul class=" dropdown-menu">
+                                <li>@Html.ActionLink("Adaugare Articol", "New", "News")</li>
+                                <li>@Html.ActionLink("Utilizatori", "Index", "User")</li>
+                                <li>@Html.ActionLink("Adaugare Categorie", "New", "Category")</li>
+
+                            </ul>
+                        </li>
+                    }
+                    @if (User.IsInRole("Editor"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Editor <span class="caret"></span></a>
+                            <ul class=" dropdown-menu">
+                                <li>@Html.ActionLink("Adaugare Articol", "New", "News")</li>
+                               
+                                
+
+                            </ul>
+                        </li>
                     }
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>

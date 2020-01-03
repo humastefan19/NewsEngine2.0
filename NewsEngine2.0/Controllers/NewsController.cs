@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using NewsEngine2._0.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,22 +14,37 @@ namespace NewsEngine2._0.Controllers
     public class NewsController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
-        
+
 
         // GET: News
-        
+
         public ActionResult Index()
         {
             ViewBag.News = db.News.Include("User").Include("Category").OrderBy(x => x.CreateDate);
-            if(TempData.ContainsKey("message"))
+            if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            
+
             return View();
         }
 
- 
+        [Authorize(Roles = "Editor")]
+        public ActionResult EditorIndex()
+        {
+            if (User.IsInRole("Editor"))
+            {
+                ViewBag.News = db.News.Where(x => x.UserId == User.Identity.GetUserId());
+                return View();
+            }
+            else
+            {
+                TempData["message"] = "Nu sunteti autorizat in acesta zona!";
+                return RedirectToAction("Index");
+            }
+        }
+
+
         public ActionResult Show(int id)
         {
             News news = db.News.Find(id);
@@ -36,7 +52,7 @@ namespace NewsEngine2._0.Controllers
             return View(news);
         }
 
-        [Authorize (Roles = "Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor")]
         public ActionResult New()
         {
             News news = new News();
@@ -51,21 +67,23 @@ namespace NewsEngine2._0.Controllers
         }
 
         [HttpPost]
-        [Authorize (Roles ="Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor")]
         public ActionResult New(News news)
         {
+            Media img = new Media();
             news.CreateDate = DateTime.Today;
             news.UserId = User.Identity.GetUserId();
             news.Categories = GetAllCategories();
             try
             {
-                
+
                 if (ModelState.IsValid)
                 {
+
                     db.News.Add(news);
                     db.SaveChanges();
                     TempData["message"] = "Articolul a fost adaugat";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("PhotoUpload");
                 }
                 else
                 {
@@ -76,6 +94,39 @@ namespace NewsEngine2._0.Controllers
             {
                 return View(news);
             }
+        }
+
+        [Authorize(Roles ="Administrator,Editor")]
+        public ActionResult PhotoUpload()
+        {
+            
+            
+            return View();
+        }
+        [HttpPost]
+        public ActionResult PhotoUpload(HttpPostedFileBase file)
+        {
+            Media photo = new Media();
+            News news = db.News.OrderByDescending(x => x.CreateDate).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                if (file != null)
+                {
+                    file.SaveAs(HttpContext.Server.MapPath("~/Images/")
+                                                          + file.FileName);
+                    photo.Path = file.FileName;
+                }
+                photo.NewsId = news.NewsId;
+                photo.MediaTypeId = 1;
+                db.Media.Add(photo);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(); 
+            }
+            
         }
 
         [Authorize (Roles ="Administrator,Editor")]

@@ -173,7 +173,7 @@
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\ProposedNewsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Dto\Media\MediaDto.cs" />
+    <Compile Include="Dto\MediaDto\MediaDto.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -249,9 +249,12 @@
     <Content Include="Views\News\New.cshtml" />
     <Content Include="Views\Category\New.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\News\PhotoUpload.cshtml" />
+    <Content Include="Views\News\EditorIndex.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\" />
     <Folder Include="Views\Comment\" />
     <Folder Include="Views\ProposedNews\" />
     <Folder Include="Views\User\" />
