@@ -11,7 +11,6 @@ namespace NewsEngine2._0.Models
     {
         [Key]
         public int ProposedNewsId { get; set; }
-        [Required]
         public string UserId {get; set; }
         [Required(ErrorMessage ="Nu ati introdus titlul")]
         public string Title { get; set; }

@@ -6,6 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Security.Claims;
+
 
 namespace NewsEngine2._0.Controllers
 {
@@ -17,24 +19,31 @@ namespace NewsEngine2._0.Controllers
         {
             if (User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
-                var propNews = db.ProposedNews.Include("Category");
+                 ViewBag.ProposedNews = db.ProposedNews.Include("User").Include("Category").OrderBy(x => x.CreatedDate); ;
                 if (TempData.ContainsKey("message"))
                 {
                     ViewBag.message = TempData["message"].ToString();
                 }
 
-                ViewBag.ProposedNews = propNews;
+                
                 return View();
             }
 
             else
             {
-                var userPropNews = db.ProposedNews.Include("Category").Where(x => x.UserId == User.Identity.GetUserId());
+                var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+                var myUser = manager.FindById(User.Identity.GetUserId());
+                var userPropNews = db.ProposedNews.Include("User").Include("Category").Where(x => x.UserId == myUser.Id );
                 ViewBag.ProposedNews = userPropNews;
                 return View();
             }
         }
 
+        public ActionResult Show(int id)
+        {
+            ProposedNews news = db.ProposedNews.Find(id);
+            return View(news);
+        }
         public ActionResult New()
         {
             ProposedNews propNews = new ProposedNews();
@@ -120,7 +129,7 @@ namespace NewsEngine2._0.Controllers
             }
             else
             {
-                TempData["message"] = "Articolul poate fi editat doar de user";
+                TempData["message"] = "Articolul poate fi editat doar de propriul user";
                 return RedirectToAction("Index");
             }
         }

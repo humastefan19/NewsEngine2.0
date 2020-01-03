@@ -10,14 +10,14 @@
         <th>Content</th>
         <th>Created Date</th>
     </tr>
- @foreach(NewsEngine2._0.Models.News news in ViewBag.News)
- {
-     <tr>
-         <td>@news.Title</td>
-         <td>@news.Content</td>
-         <td>@news.CreateDate</td>
-     </tr>
- }
+    @foreach (NewsEngine2._0.Models.ProposedNews news in ViewBag.ProposedNews)
+    {
+        <tr>
+            <td>@news.Title</td>
+            <td>@news.Content</td>
+            <td>@news.CreatedDate</td>
+        </tr>
+    }
 </table>
 
 

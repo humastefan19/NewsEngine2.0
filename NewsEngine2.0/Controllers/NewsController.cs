@@ -19,7 +19,7 @@ namespace NewsEngine2._0.Controllers
         
         public ActionResult Index()
         {
-            ViewBag.News = db.News.Include("User").Include("Category").OrderBy(x => x.CreateDate);
+            ViewBag.News = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
             if(TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
@@ -41,7 +41,7 @@ namespace NewsEngine2._0.Controllers
         {
             News news = new News();
 
-            news.CreateDate = DateTime.Today;
+            news.CreateDate = DateTime.Now;
             news.UserId = User.Identity.GetUserId();
             news.Categories = GetAllCategories();
 
@@ -54,7 +54,7 @@ namespace NewsEngine2._0.Controllers
         [Authorize (Roles ="Administrator,Editor")]
         public ActionResult New(News news)
         {
-            news.CreateDate = DateTime.Today;
+            news.CreateDate = DateTime.Now ;
             news.UserId = User.Identity.GetUserId();
             news.Categories = GetAllCategories();
             try

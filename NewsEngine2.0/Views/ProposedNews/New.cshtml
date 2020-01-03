@@ -1,0 +1,29 @@
+﻿@model NewsEngine2._0.Models.ProposedNews
+
+@{ ViewBag.Titlu = "Adaugare stire"; }
+
+<h2>@ViewBag.Titlu</h2> <br />
+<form method="post" action="/News/New">
+
+    @Html.Label("Title", "Titlu Articol")
+    <br />
+    @Html.TextBox("Title", null, new { @class = "form-control" })
+    <br />
+    <br />
+
+    @Html.Label("Content", "Continut Articol")
+    <br />
+    @Html.TextArea("Content", null, new { @class = "form-control" })
+    <br />
+    <br />
+
+    @Html.Hidden("CreateDate", DateTime.Now, new { @class = "form-control" })
+
+    <label>Selectati categoria</label>
+    @Html.DropDownListFor(m => m.CategoryId, new SelectList(Model.Categories, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
+    <br />
+
+    <button class="btn btn-sm btn-success" type="submit">Propune articol</button>
+
+</form>
+

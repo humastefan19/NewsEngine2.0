@@ -249,11 +249,12 @@
     <Content Include="Views\News\New.cshtml" />
     <Content Include="Views\Category\New.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\ProposedNews\New.cshtml" />
+    <Content Include="Views\ProposedNews\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Comment\" />
-    <Folder Include="Views\ProposedNews\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
