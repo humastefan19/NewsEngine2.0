@@ -29,6 +29,7 @@ namespace NewsEngine2._0.Models
         public IEnumerable<SelectListItem> Categories { get; set; }
         public IEnumerable<SelectListItem> Comments { get; set; }
         public IEnumerable<MediaDto> Media { get; set; }
+        public IEnumerable<Media> Medias { get; set; }
     }
 
 }

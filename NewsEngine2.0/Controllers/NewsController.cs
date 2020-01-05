@@ -14,17 +14,35 @@ namespace NewsEngine2._0.Controllers
     public class NewsController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
-
+        private int _perPage = 5;
 
         // GET: News
 
         public ActionResult Index()
         {
-            ViewBag.News = db.News.Include("User").Include("Category").OrderBy(x => x.CreateDate);
+            var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
             }
+
+            var totalItems = news.Count();
+
+            var currectPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+            if (!currectPage.Equals(0))
+            {
+                offset = (currectPage - 1) * this._perPage;
+            }
+
+            var paginatedArticles = news.Skip(offset).Take(this._perPage);
+            ViewBag.perPage = this._perPage;
+            ViewBag.total = totalItems;
+
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+            ViewBag.News = paginatedArticles;
 
             return View();
         }
@@ -34,7 +52,26 @@ namespace NewsEngine2._0.Controllers
         {
             if (User.IsInRole("Editor"))
             {
-                ViewBag.News = db.News.Where(x => x.UserId == User.Identity.GetUserId());
+                var news = db.News.Where(x => x.UserId == User.Identity.GetUserId());
+
+                var totalItems = news.Count();
+
+                var currectPage = Convert.ToInt32(Request.Params.Get("page"));
+
+                var offset = 0;
+
+                if (!currectPage.Equals(0))
+                {
+                    offset = (currectPage - 1) * this._perPage;
+                }
+
+                var paginatedArticles = news.Skip(offset).Take(this._perPage);
+                ViewBag.perPage = this._perPage;
+                ViewBag.total = totalItems;
+
+                ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+                ViewBag.News = paginatedArticles;
+
                 return View();
             }
             else
@@ -49,6 +86,8 @@ namespace NewsEngine2._0.Controllers
         {
             News news = db.News.Find(id);
             news.Comments = GetAllComments(news.NewsId);
+            var media = db.Media.Where(x => x.NewsId == id).ToArray();
+            news.Medias = media;
             return View(news);
         }
 

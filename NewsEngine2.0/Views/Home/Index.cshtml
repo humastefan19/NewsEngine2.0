@@ -1,6 +1,41 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
+<style>
+    .div-carousel{
+        background-repeat:no-repeat;
+        background-size:cover;
+        background-position:center;
+        width:inherit;
+        height:800px;
+        position:relative;
+        padding:0;
+
+    }
+        .div-carousel:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+        }
+    .p-carousel {
+        font-size: 25px;
+        text-align: justify;
+        position:relative;
+        margin-left:20%;
+        color:black;
+        
+        margin-right:20%;
+    }
+    .center{
+        margin-top:0;
+        margin-left:20%;
+        margin-right:20%;
+    }
+</style>
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
@@ -8,28 +43,29 @@
         <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
         <li data-target="#myCarousel" data-slide-to="1"></li>
         <li data-target="#myCarousel" data-slide-to="2"></li>
+        <li data-target="#myCarousel" data-slide-to="3"></li>
     </ol>
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
 
-        <div class="item active">
-            <h2 class="text-center">@ViewBag.First.News.Title</h2>
-            <p class="text-center">@ViewBag.First.News.Content</p>
-            @if (ViewBag.First.Medias.Count > 0)
+        <div class="item active div-carousel" style="background-image:url('../Images/@ViewBag.First.Medias[0].Path')" >
+            <h2 class="text-center center">@ViewBag.First.News.Title</h2>
+            <p class="p-carousel truncate ">@ViewBag.First.News.Content</p>
+            @*@if (ViewBag.First.Medias.Count > 0)
             {
             <img src="~/Images/@ViewBag.First.Medias[0].Path" />
-            }
+            }*@
         </div>
         @foreach (NewsEngine2._0.Dto.MediaDto.MediaDto article in ViewBag.Article)
         {
-            <div class="item">
-                <h2 class="text-center">@article.News.Title</h2>
-                <p class="text-center">@article.News.Content</p>
-                @if (article.Medias.Count > 0)
+            <div class="item div-carousel" style="background-image:url('../Images/@article.Medias[0].Path')">
+                <h2 class="text-center center">@article.News.Title</h2>
+                <p class="p-carousel truncate">@article.News.Content</p>
+                @*@if (article.Medias.Count > 0)
                 {
                 <img src="~/Images/@article.Medias[0].Path" />
-                }
+                }*@
             </div>
         }
         
