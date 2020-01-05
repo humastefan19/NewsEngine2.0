@@ -1,4 +1,5 @@
-﻿using NewsEngine2._0.Models;
+﻿using NewsEngine2._0.Dto.MediaDto;
+using NewsEngine2._0.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,8 +21,23 @@ namespace NewsEngine2._0.Controllers
          
         public ActionResult Index()
         {
-            ViewBag.First = db.News.OrderBy(x => x.CreateDate).FirstOrDefault();
-            ViewBag.Four = db.News.OrderBy(x => x.CreateDate).Skip(1).Take(4);
+            var first = db.News.OrderByDescending(x => x.CreateDate).FirstOrDefault();
+            ViewBag.First = new MediaDto
+            {
+                News = first,
+                Medias = db.Media.Where(x => x.NewsId == first.NewsId).ToList()
+            };
+            var news = db.News.OrderByDescending(x => x.CreateDate).Skip(1).Take(3);
+            List<MediaDto> article = new List<MediaDto>();
+            foreach(News item in news)
+            {
+                article.Add(new MediaDto
+                {
+                    News = item,
+                    Medias = db.Media.Where(x => x.NewsId == item.NewsId).ToList()
+                });
+            }
+            ViewBag.Article = article;
             return View();
         }
 

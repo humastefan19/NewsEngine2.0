@@ -22,7 +22,11 @@ namespace NewsEngine2._0.Models
         public DateTime CreatedDate { get; set; }
 
         public virtual ApplicationUser User { get; set; }
+<<<<<<< HEAD
         public Category Category { get; set; }
+=======
+        public virtual Category Category { get; set; }
+>>>>>>> e73f4497f08ca1144bb4c999469ce9356fed7972
         public IEnumerable<SelectListItem> Categories { get; set; }
     }
 }

@@ -94,7 +94,7 @@ namespace NewsEngine2._0.Controllers
                 return RedirectToAction("Index");
 
             }
-        } 
+        }
 
 
         public ActionResult Edit(int id)
@@ -161,10 +161,10 @@ namespace NewsEngine2._0.Controllers
             var selectList = new List<SelectListItem>();
             var categories = from cat in db.Categories
                              select cat;
-            
+
             foreach (var category in categories)
             {
-               
+
                 selectList.Add(new SelectListItem
                 {
                     Value = category.CategoryId.ToString(),
