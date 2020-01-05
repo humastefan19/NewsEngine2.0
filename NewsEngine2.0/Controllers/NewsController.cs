@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using NewsEngine2._0.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,30 +14,84 @@ namespace NewsEngine2._0.Controllers
     public class NewsController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
-        
+        private int _perPage = 5;
 
         // GET: News
-        
+
         public ActionResult Index()
         {
-            ViewBag.News = db.News.Include("User").Include("Category").OrderBy(x => x.CreateDate);
-            if(TempData.ContainsKey("message"))
+            var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
+            if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            
+
+            var totalItems = news.Count();
+
+            var currectPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+            if (!currectPage.Equals(0))
+            {
+                offset = (currectPage - 1) * this._perPage;
+            }
+
+            var paginatedArticles = news.Skip(offset).Take(this._perPage);
+            ViewBag.perPage = this._perPage;
+            ViewBag.total = totalItems;
+
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+            ViewBag.News = paginatedArticles;
+
             return View();
         }
 
- 
+        [Authorize(Roles = "Editor")]
+        public ActionResult EditorIndex()
+        {
+            if (User.IsInRole("Editor"))
+            {
+                var news = db.News.Where(x => x.UserId == User.Identity.GetUserId());
+
+                var totalItems = news.Count();
+
+                var currectPage = Convert.ToInt32(Request.Params.Get("page"));
+
+                var offset = 0;
+
+                if (!currectPage.Equals(0))
+                {
+                    offset = (currectPage - 1) * this._perPage;
+                }
+
+                var paginatedArticles = news.Skip(offset).Take(this._perPage);
+                ViewBag.perPage = this._perPage;
+                ViewBag.total = totalItems;
+
+                ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+                ViewBag.News = paginatedArticles;
+
+                return View();
+            }
+            else
+            {
+                TempData["message"] = "Nu sunteti autorizat in acesta zona!";
+                return RedirectToAction("Index");
+            }
+        }
+
+
         public ActionResult Show(int id)
         {
             News news = db.News.Find(id);
             news.Comments = GetAllComments(news.NewsId);
+            var media = db.Media.Where(x => x.NewsId == id).ToArray();
+            news.Medias = media;
             return View(news);
         }
 
-        [Authorize (Roles = "Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor")]
         public ActionResult New()
         {
             News news = new News();
@@ -51,21 +106,23 @@ namespace NewsEngine2._0.Controllers
         }
 
         [HttpPost]
-        [Authorize (Roles ="Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor")]
         public ActionResult New(News news)
         {
+            Media img = new Media();
             news.CreateDate = DateTime.Today;
             news.UserId = User.Identity.GetUserId();
             news.Categories = GetAllCategories();
             try
             {
-                
+
                 if (ModelState.IsValid)
                 {
+
                     db.News.Add(news);
                     db.SaveChanges();
                     TempData["message"] = "Articolul a fost adaugat";
-                    return RedirectToAction("Index");
+                    return RedirectToAction("PhotoUpload");
                 }
                 else
                 {
@@ -76,6 +133,39 @@ namespace NewsEngine2._0.Controllers
             {
                 return View(news);
             }
+        }
+
+        [Authorize(Roles ="Administrator,Editor")]
+        public ActionResult PhotoUpload()
+        {
+            
+            
+            return View();
+        }
+        [HttpPost]
+        public ActionResult PhotoUpload(HttpPostedFileBase file)
+        {
+            Media photo = new Media();
+            News news = db.News.OrderByDescending(x => x.CreateDate).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                if (file != null)
+                {
+                    file.SaveAs(HttpContext.Server.MapPath("~/Images/")
+                                                          + file.FileName);
+                    photo.Path = file.FileName;
+                }
+                photo.NewsId = news.NewsId;
+                photo.MediaTypeId = 1;
+                db.Media.Add(photo);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(); 
+            }
+            
         }
 
         [Authorize (Roles ="Administrator,Editor")]

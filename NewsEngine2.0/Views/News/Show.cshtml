@@ -1,0 +1,30 @@
+﻿@model NewsEngine2._0.Models.News
+@{
+    ViewBag.Title = "Show";
+}
+
+<div class="row">
+    <div class="col-md-2 col-lg-2">
+
+    </div>
+    <div class="col-xs-12 col-sm-12 col-lg-8 col-md-8">
+        <h2 class=" text-center">
+            @Model.Title
+        </h2>
+        <hr />
+        <p style="font-size:10px">Creat la @Model.CreateDate de catre @Model.User.UserName</p>
+        <hr />
+        <img class="img-responsive center-block" src="~/Images/@Model.Medias.First().Path "/>
+        <br />
+        <p class=" text-justify">@Model.Content</p>
+        <hr />
+        
+    </div>
+    <div class="col-md-2 col-lg-2">
+
+    </div>
+</div>
+
+
+
+
