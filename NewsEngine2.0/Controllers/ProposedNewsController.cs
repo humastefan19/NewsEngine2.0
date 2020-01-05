@@ -11,10 +11,18 @@ using System.Security.Claims;
 
 namespace NewsEngine2._0.Controllers
 {
+    [Authorize]
     public class ProposedNewsController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
+        private ApplicationUserManager userManager = new ApplicationUserManager();
+        public ProposedNewsController(){}
+        public ProposedNewsController(ApplicationUserManager _userManager){
+            userManager = _userManager;
+        }
+        
         // GET: ProposedNews
+        [Authorize(Roles = "User,Editor")]
         public ActionResult Index()
         {
             if (User.IsInRole("Editor") || User.IsInRole("Admin"))
@@ -31,14 +39,15 @@ namespace NewsEngine2._0.Controllers
 
             else
             {
-                var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-                var myUser = manager.FindById(User.Identity.GetUserId());
+            
+                var myUser = userManager.FindById(User.Identity.GetUserId());
                 var userPropNews = db.ProposedNews.Include("User").Include("Category").Where(x => x.UserId == myUser.Id );
                 ViewBag.ProposedNews = userPropNews;
                 return View();
             }
         }
 
+ 
         public ActionResult Show(int id)
         {
             ProposedNews news = db.ProposedNews.Find(id);
@@ -55,6 +64,8 @@ namespace NewsEngine2._0.Controllers
         public ActionResult New(ProposedNews news)
         {
             news.Categories = GetAllCategories();
+            news.CreatedDate = DateTime.Now;
+            news.UserId = User.Identity.GetUserId();
             if (User.IsInRole("User"))
             {
                 try

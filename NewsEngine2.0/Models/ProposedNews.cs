@@ -21,7 +21,7 @@ namespace NewsEngine2._0.Models
         [DataType(DataType.DateTime, ErrorMessage = "Campul trebuie sa contina data si ora")]
         public DateTime CreatedDate { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; }
         public Category Category { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
     }
