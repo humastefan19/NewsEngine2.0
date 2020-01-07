@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "New";
+}
+
+
+<form method="post" action="/News/Index">
+   
+    @Html.TextArea("TextContent", null, new { @class = "form-control" })
+
+    <button class="btn btn-sm btn-success" type="submit">Adauga comentariu</button>
+    <br />
+
+</form>

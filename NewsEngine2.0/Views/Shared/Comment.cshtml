@@ -1,0 +1,16 @@
+﻿@model NewsEngine2._0.Models.Comment
+
+
+@using (Html.BeginForm("New","Comment",FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+    <div class="addcommentbox">
+        <h2> Add Comment </h2>
+        @Html.TextAreaFor(model => model.TextContent)
+        <div class="ErrorMessage">
+            @Html.ValidationMessageFor(model => model.TextContent)
+        </div>
+        <input id="addComment" type="button" onclick="" value="Add" />
+    </div>
+
+}

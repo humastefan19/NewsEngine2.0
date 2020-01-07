@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@if (TempData.ContainsKey("message"))
+{
+    <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
+}
+
+<br />
+
+@foreach (NewsEngine2._0.Models.Comment com in ViewBag.Comments)
+{
+    <div class=" = " panel panel-default">
+
+        @Html.Partial("Comment", com)
+    </div>
+    <br />
+}
