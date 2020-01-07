@@ -5,6 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+   
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
@@ -30,7 +31,7 @@
                             <ul class=" dropdown-menu">
                                 <li>@Html.ActionLink("Adaugare Articol", "New", "News")</li>
                                 <li>@Html.ActionLink("Utilizatori", "Index", "User")</li>
-                                <li>@Html.ActionLink("Adaugare Categorie", "New", "Category")</li>
+                                <li>@Html.ActionLink("Categorii", "Index", "Category")</li>
 
                             </ul>
                         </li>
@@ -47,11 +48,11 @@
 
                             </ul>
                         </li>
-                        <li>@Html.ActionLink("Categori", "Index", "Category")</li>
+                        
                     }
                     @if (User.IsInRole("User"))
                     {
-                        <li>@Html.ActionLink("Categori", "Index", "Category")</li>
+                        
                         <li>@Html.ActionLink("Propune Stire", "New", "ProposedNews")</li>
                     }
 
@@ -65,11 +66,13 @@
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - ReadyToGo News</p>
+            
         </footer>
     </div>
-
+    
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+  
     @RenderSection("scripts", required: false)
 </body>
 </html>

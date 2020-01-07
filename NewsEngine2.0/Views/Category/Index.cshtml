@@ -2,6 +2,11 @@
 @{
     ViewBag.Title = "Lista categorii";
 }
+<style>
+    .button-margin{
+        padding-bottom:20px;
+    }
+</style>
 
 <h2>@ViewBag.Title</h2>
 <br />
@@ -11,19 +16,33 @@
     <h3 class="alert alert-info" role="alert">@ViewBag.message</h3>
 }
 
-@foreach (var category in ViewBag.Categories)
-{
-    @Html.Label("Name", "Denumire categorie")
-    <p>@category.Name</p>
-    <a class="btn btn-success" href="/Category/Show/@category.CategoryId">Afisare categorie</a>
-    <a class="btn btn-success" href="/Category/Edit/@category.CategoryId">Editare categorie</a>
-    <br />
-    <hr />
-    <br />
-}
-<br />
-<a class="btn btn-info" href="/Category/New">Adauga o noua categorie</a>
-<br /><br />
-<a class="btn btn-info" href="/Article/Index">Lista articole</a>
-<br />
+<div class="panel panel-success">
+    <div class="panel-heading">
+    @ViewBag.Title
+        <div class="pull-right">
+            <a class="btn btn-sm btn-info" href="/Category/New">Adauga o noua categorie</a>
+            <a class="btn btn-sm btn-info" href="/News/Index">Lista articole</a>
+        </div>
+    </div>
+    <div class="panel-body">
+        @foreach (var category in ViewBag.Categories)
+        {
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            @category.Name
+                            <div class="pull-right center-block">
+                                <a class="btn btn-sm btn-success" href="/Category/Show/@category.CategoryId">Afisare categorie</a>
+                                <a class="btn btn-sm btn-success" href="/Category/Edit/@category.CategoryId">Editare categorie</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
 
