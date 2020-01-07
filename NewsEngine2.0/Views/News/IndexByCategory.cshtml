@@ -1,5 +1,6 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿
+@{
+    ViewBag.Title = "IndexByCategory";
 }
 
 <br />
@@ -11,7 +12,7 @@
 <br />
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="panel panel-info">
+        <div class="panel panel-success">
             <div class="panel-body">
                 <a class="btn btn-success" href="/News/Index">Toate stirile</a>
                 @foreach (NewsEngine2._0.Models.Category item in ViewBag.Categories)
@@ -23,47 +24,47 @@
     </div>
 </div>
 
+
 @foreach (NewsEngine2._0.Dto.MediaDto.MediaDto item in ViewBag.News)
 {
 
     <div class="row">
 
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-            <div class="panel panel-success">
-                <div class="panel-heading"><a style="color:black" href="/News/Show/@item.News.NewsId">@item.News.Title</a></div>
-                <div class="panel-body">
-                    <div class="media">
-                        @if (item.Medias.Count > 0)
-                        {
-                            <div class="media-left media-middle">
-                                <a href="#">
-                                    <img class="media-object" style="width:125px; height:95px;" src="/Images/@item.Medias[0].Path" alt="...">
-                                </a>
+            
+                <div class="panel panel-success">
+                    <div class="panel-heading"><a style="color:black" href="/News/Show/@item.News.NewsId">@item.News.Title</a></div>
+                    <div class="panel-body">
+                        <div class="media">
+                            @if (item.Medias.Count > 0)
+                            {
+                                <div class="media-left media-middle">
+                                    <a href="#">
+                                        <img class="media-object" style="width:125px; height:95px;" src="/Images/@item.Medias[0].Path" alt="...">
+                                    </a>
+                                </div>
+                            }
+                            <div class="media-body">
+                                <p class="truncate text-justify"> @item.News.Content</p>
                             </div>
-                        }
-                        <div class="media-body">
-                            <p class="truncate text-justify"> @item.News.Content</p>
                         </div>
                     </div>
-                </div>
-                @if (User.IsInRole("Administrator"))
-                {
-                <div class="panel-footer">
-
-                    @using (Html.BeginForm(actionName: "Delete", controllerName: "News", method: FormMethod.Post, routeValues: new { id = item.News.NewsId }))
+                    @if (User.IsInRole("Administrator"))
                     {
+                    <div class="panel-footer">
 
-                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        @using (Html.BeginForm(actionName: "Delete", controllerName: "News", method: FormMethod.Post, routeValues: new { id = item.News.NewsId }))
+                        {
 
-                        <button class="btn btn-danger" type="submit">Sterge</button>
-                        <a class="btn btn-info" href="/News/Edit/@item.News.NewsId">Editeaza</a>
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+                            <button class="btn btn-danger" type="submit">Sterge</button>
+                            <a class="btn btn-info" href="/News/Edit/@item.News.NewsId">Editeaza</a>
+                        }
+                    </div>
                     }
-
                 </div>
-                }
-            </div>
-
+            
         </div>
 
     </div>
@@ -96,9 +97,4 @@
     <div class="col-lg-2 col-md-2">
     </div>
 </div>
-
-
-
-
-
 
