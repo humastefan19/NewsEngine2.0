@@ -1,6 +1,6 @@
 ﻿@model NewsEngine2._0.Models.Category
 @{
-    ViewBag.Title = "Adaugare Categorie";
+    ViewBag.Title = "Editare Categorie";
 }
 
 <style>
@@ -17,10 +17,9 @@
         margin: 0;
     }
 </style>
-
-@using (Html.BeginForm(actionName: "New", controllerName: "Category"))
+@using (Html.BeginForm(actionName: "Edit", controllerName: "Category"))
 {
-
+    @Html.HttpMethodOverride(HttpVerbs.Put)
 
     <div class="panel panel-success">
         <div class="panel-heading">
@@ -34,7 +33,7 @@
                     @Html.Label("Name", "Denumire categorie")
                 </div>
                 <div class="col-sm-10">
-                    @Html.TextBox("Name", null, new { @class = "form-control length" })
+                    @Html.TextBox("Name", Model.Name, new { @class = "form-control length" })
                     @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
 
                 </div>
@@ -47,8 +46,3 @@
         </div>
     </div>
 }
-
-
-
-
-
