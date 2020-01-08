@@ -39,7 +39,7 @@ namespace NewsEngine2._0.Controllers
                     {
                         if (TryUpdateModel(commentToEdit))
                         {
-                            commentToEdit.Content = editedComment.Content;
+                            commentToEdit.Description = editedComment.Description;
 
                             db.SaveChanges();
                         }
@@ -63,20 +63,23 @@ namespace NewsEngine2._0.Controllers
             }
         }
 
-        public ActionResult New(int newsId)
+        public ActionResult New(int? id)
         {
-
+            
             Comment comment = new Comment();
 
-            comment.UserId = User.Identity.GetUserId();
-            comment.NewsId = newsId;
+           
+            
+            comment.NewsId = id.GetValueOrDefault();
+            
 
-            return View();
+            return PartialView("Comment", comment);
         }
 
         [HttpPost]
         public ActionResult New(Comment newComment)
         {
+            newComment.UserId = User.Identity.GetUserId();
             try
             {
                 if (ModelState.IsValid)
@@ -84,7 +87,7 @@ namespace NewsEngine2._0.Controllers
                     db.Comments.Add(newComment);
                     db.SaveChanges();
                     TempData["message"] = "Comentariul a fost adaugat";
-                    return RedirectToAction("Show","News",newComment.NewsId);
+                    return Redirect("http://localhost:53164/News/Show/" + newComment.NewsId.ToString());
                 }
                 else
                 {

@@ -39,26 +39,7 @@
                     </div>
                 </a>
                 <div class="panel-footer">
-                    <h1>Comentarii:</h1>
-
-                    @if (ViewBag.Comments != null)
-                    {
-                        foreach (NewsEngine2._0.Models.Comment com in ViewBag.Comments)
-                        {<h1>com.NewsId</h1>
-                            if (com.NewsId == item.NewsId)
-                            {
-                                <div class=" panel panel-default">
-
-                                    @Html.Partial("CommentDetails", com)
-                                </div>
-                                <br />
-                            }
-                        }
-                    }
-                    else
-                    { <h1>nu am comm</h1>}
-                    @*@{Html.RenderAction("New", "Comment", new { id = item.NewsId });*@
-                    @*  }*@
+                    
 
 
 

@@ -64,7 +64,7 @@ namespace NewsEngine2._0.Controllers
 
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
             ViewBag.News = paginatedArticles;
-
+            
             return View();
         }
 
@@ -103,12 +103,13 @@ namespace NewsEngine2._0.Controllers
         }
 
 
-        public ActionResult Show(int id)
+        public ActionResult Show(int? id)
         {
             News news = db.News.Find(id);
             news.Comments = GetAllComments(news.NewsId);
             var media = db.Media.Where(x => x.NewsId == id).ToArray();
             news.Medias = media;
+            ViewBag.Comments = GetAllComments(news.NewsId);
             return View(news);
         }
 
@@ -303,27 +304,9 @@ namespace NewsEngine2._0.Controllers
         }
 
         [NonAction]
-        public IEnumerable<SelectListItem> GetAllComments(int newsId)
+        public IEnumerable<Comment> GetAllComments(int newsId)
         {
-            // generam o lista goala
-            var selectList = new List<SelectListItem>();
-
-            // Extragem toate categoriile din baza de date
-            var comments = db.Comments.Where(x => x.NewsId == newsId);
-
-            // iteram prin categorii
-            foreach (var comment in comments)
-            {
-                // Adaugam in lista elementele necesare pentru dropdown
-                selectList.Add(new SelectListItem
-                {
-                    Value = comment.CommentId.ToString(),
-                    Text = comment.Content.ToString()
-                });
-            }
-
-            // returnam lista de categorii
-            return selectList;
+            return db.Comments.Where(x => x.NewsId == newsId).ToList();
         }
 
 
