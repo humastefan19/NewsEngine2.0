@@ -23,6 +23,24 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      
+        <div class="btn-group">
+            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Sorteaza dupa <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="/News/IndexSorted/1">Alfabetic</a></li>
+                <li><a href="/News/IndexSorted/3">Crescator dupa data</a></li>
+                <li><a href="/News/IndexSorted/2">Descrescator dupa data</a></li>
+             
+            </ul>
+        </div> 
+    </div>
+</div>
+<br />
+
 @foreach (NewsEngine2._0.Dto.MediaDto.MediaDto item in ViewBag.News)
 {
 

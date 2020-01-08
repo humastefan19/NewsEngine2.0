@@ -9,7 +9,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace NewsEngine2._0.Controllers
 {
-    [Authorize(Roles ="Administrator")]
+    [Authorize(Roles = "Administrator")]
     public class UserController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -25,50 +25,68 @@ namespace NewsEngine2._0.Controllers
             return View();
         }
 
-        public ActionResult Show(int id)
+        public ActionResult Show(string id)
         {
             ApplicationUser user = db.Users.Find(id);
             return View(user);
         }
 
-        public ActionResult Edit(int id)
+
+
+        public ActionResult Edit(string id)
         {
             ApplicationUser user = db.Users.Find(id);
+            user.AllRoles = GetAllRoles();
+            var userRole = user.Roles.FirstOrDefault();
+            ViewBag.userRole = userRole.RoleId;
             return View(user);
         }
 
         [HttpPut]
-        public ActionResult Edit(int id, ApplicationUser requestUser)
+        public ActionResult Edit(string id, ApplicationUser newData)
         {
+            ApplicationUser user = db.Users.Find(id);
+            user.AllRoles = GetAllRoles();
+            var userRole = user.Roles.FirstOrDefault();
+            ViewBag.userRole = userRole.RoleId;
+
             try
             {
-                if (ModelState.IsValid)
+                ApplicationDbContext context = new ApplicationDbContext();
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+                var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+                if (TryUpdateModel(user))
                 {
-                    ApplicationUser user = db.Users.Find(id);
-                    if (TryUpdateModel(user))
+                    user.UserName = newData.UserName;
+                    user.Email = newData.Email;
+                    user.PhoneNumber = newData.PhoneNumber;
+
+                    var roles = from role in db.Roles select role;
+                    foreach (var role in roles)
                     {
-                        user.UserName = requestUser.UserName;
-                        user.PhoneNumber = requestUser.PhoneNumber;
-                        user.Email = requestUser.Email;
-                        db.SaveChanges();
-                        TempData["message"] = "Userul a fost modificat!";
+                        UserManager.RemoveFromRole(id, role.Name);
                     }
-                    return RedirectToAction("Index");
+
+                    var selectedRole = db.Roles.Find(HttpContext.Request.Params.Get("newRole"));
+                    UserManager.AddToRole(id, selectedRole.Name);
+
+                    db.SaveChanges();
                 }
-                else
-                {
-                    return View(requestUser);
-                }
-                
+                return RedirectToAction("Index");
             }
-            catch( Exception e)
+            catch (Exception e)
             {
-                return View(requestUser);
+                Response.Write(e.Message);
+                return View(user);
             }
         }
 
-        [HttpDelete]
-        public ActionResult Delete(int id)
+
+    
+
+    [HttpDelete]
+        public ActionResult Delete(string id)
         {
             ApplicationUser user = db.Users.Find(id);
             db.Users.Remove(user);
@@ -76,7 +94,28 @@ namespace NewsEngine2._0.Controllers
             TempData["message"] = "Userul a fost sters cu succes";
             return RedirectToAction("Index");
         }
-        
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllRoles()
+        {
+            var selectList = new List<SelectListItem>();
+
+            var roles = from role in db.Roles select role;
+            foreach (var role in roles)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = role.Id.ToString(),
+                    Text = role.Name.ToString()
+                });
+            }
+            return selectList;
+        }
+
+
+
+
+
 
     }
 }

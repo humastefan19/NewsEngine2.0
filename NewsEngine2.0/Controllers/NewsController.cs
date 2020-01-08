@@ -56,6 +56,7 @@ namespace NewsEngine2._0.Controllers
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
             ViewBag.News = paginatedArticles;
             ViewBag.Categories = db.Categories;
+        
             return View();
         }
 
@@ -96,6 +97,58 @@ namespace NewsEngine2._0.Controllers
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
             ViewBag.News = paginatedArticles;
             ViewBag.Categories = db.Categories;
+            ViewBag.Id = id;
+            return View();
+        }
+
+        public ActionResult IndexSorted(int id)
+        {
+
+            List<News> news = new List<News>();
+            if(id == 1)
+            {
+                news = db.News.OrderBy(x => x.Title).ToList();
+            }
+            else if(id == 2)
+            {
+                news = db.News.OrderByDescending(x => x.CreateDate).ToList();
+            }
+            else if(id == 3)
+            {
+                news = db.News.OrderBy(x => x.CreateDate).ToList();
+            }
+
+            List<MediaDto> medias = new List<MediaDto>();
+
+            foreach (News item in news)
+            {
+                medias.Add(new MediaDto
+                {
+                    News = item,
+                    Medias = db.Media.Where(x => x.NewsId == item.NewsId).ToList()
+                });
+            }
+
+            var totalItems = medias.Count();
+
+            var currectPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+
+            if (!currectPage.Equals(0))
+            {
+                offset = (currectPage - 1) * this._perPage;
+            }
+
+            var paginatedArticles = medias.Skip(offset).Take(this._perPage);
+            ViewBag.perPage = this._perPage;
+            ViewBag.total = totalItems;
+
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+            ViewBag.News = paginatedArticles;
+            ViewBag.Categories = db.Categories;
+            ViewBag.Id = id;
             return View();
         }
 
@@ -372,6 +425,8 @@ namespace NewsEngine2._0.Controllers
             // returnam lista de categorii
             return selectList;
         }
+
+        
 
 
     }
