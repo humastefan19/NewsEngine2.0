@@ -19,9 +19,30 @@ namespace NewsEngine2._0.Controllers
 
         // GET: News
 
-        public ActionResult Index()
+        public ActionResult Index(string searchBy, string searchString)
         {
-            var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
+            //var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
+            var news = from n in db.News
+                       join u in db.Users on n.UserId equals u.Id
+                       join c in db.Categories on n.CategoryId equals c.CategoryId
+                       select n;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                if (searchBy == "Title")
+                {
+                    news = news.Where(s => s.Title.Contains(searchString)).OrderByDescending(x => x.CreateDate);
+                }
+                else if (searchBy == "Content")
+                {
+                    news = news.Where(s => s.Content.Contains(searchString)).OrderByDescending(x => x.CreateDate);
+                }
+            }
+            else
+            {
+                news = news.OrderByDescending(x => x.CreateDate);
+            }
+
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
@@ -55,6 +76,7 @@ namespace NewsEngine2._0.Controllers
 
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
             ViewBag.News = paginatedArticles;
+
             ViewBag.Categories = db.Categories;
         
             return View();
@@ -149,6 +171,7 @@ namespace NewsEngine2._0.Controllers
             ViewBag.News = paginatedArticles;
             ViewBag.Categories = db.Categories;
             ViewBag.Id = id;
+
             return View();
         }
 
@@ -203,12 +226,13 @@ namespace NewsEngine2._0.Controllers
         }
 
 
-        public ActionResult Show(int id)
+        public ActionResult Show(int? id)
         {
             News news = db.News.Find(id);
             news.Comments = GetAllComments(news.NewsId);
             var media = db.Media.Where(x => x.NewsId == id).ToArray();
             news.Medias = media;
+            ViewBag.Comments = GetAllComments(news.NewsId);
             return View(news);
         }
 
@@ -403,27 +427,9 @@ namespace NewsEngine2._0.Controllers
         }
 
         [NonAction]
-        public IEnumerable<SelectListItem> GetAllComments(int newsId)
+        public IEnumerable<Comment> GetAllComments(int newsId)
         {
-            // generam o lista goala
-            var selectList = new List<SelectListItem>();
-
-            // Extragem toate categoriile din baza de date
-            var comments = db.Comments.Where(x => x.NewsId == newsId);
-
-            // iteram prin categorii
-            foreach (var comment in comments)
-            {
-                // Adaugam in lista elementele necesare pentru dropdown
-                selectList.Add(new SelectListItem
-                {
-                    Value = comment.CommentId.ToString(),
-                    Text = comment.Content.ToString()
-                });
-            }
-
-            // returnam lista de categorii
-            return selectList;
+            return db.Comments.Where(x => x.NewsId == newsId).ToList();
         }
 
         

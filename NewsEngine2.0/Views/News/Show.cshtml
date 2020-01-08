@@ -14,12 +14,30 @@
         <hr />
         <p style="font-size:10px">Creat la @Model.CreateDate de catre @Model.User.UserName</p>
         <hr />
-        <img class="img-responsive center-block" src="~/Images/@Model.Medias.First().Path "/>
+        <img class="img-responsive center-block" src="~/Images/@Model.Medias.First().Path " />
         <br />
         <p class=" text-justify">@Model.Content</p>
         <hr />
-        
+        <h1>Comentarii:</h1>
+
+        @if (ViewBag.Comments.Count != 0)
+        {
+            foreach (NewsEngine2._0.Models.Comment com in ViewBag.Comments)
+            {<h1>com.NewsId</h1>
+               
+                    <div class=" panel panel-default">
+
+                        @Html.Partial("CommentDetails", com)
+                    </div>
+                    <br />
+                
+            }
+        }
+
+        @Html.Action("New", "Comment", Model.NewsId)
+
     </div>
+
     <div class="col-md-2 col-lg-2">
 
     </div>
