@@ -1,0 +1,24 @@
+﻿@model NewsEngine2._0.Models.ApplicationUser
+@{
+    ViewBag.Title = "Show";
+}
+
+<h1>Afisare utilizator</h1>
+
+
+<div class="panel panel-default">
+    @Html.Partial("UserInfo", Model)
+
+</div>
+
+
+    @using (Html.BeginForm(actionName: "Delete", controllerName: "User", method: FormMethod.Post, routeValues: new { id = @Model.Id }))
+    {
+
+        @Html.HttpMethodOverride(HttpVerbs.Delete)
+        <br />
+        <button class="btn btn-success" type="submit">Sterge utilizator</button>
+
+    }
+
+
