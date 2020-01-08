@@ -35,7 +35,7 @@
 
                             </ul>
                         </li>
-                        <li>@Html.ActionLink("Categori", "Index", "Category")</li>
+                       
                     }
                     @if (User.IsInRole("Editor"))
                     {
@@ -54,6 +54,7 @@
                     {
                         
                         <li>@Html.ActionLink("Propune Stire", "New", "ProposedNews")</li>
+                        <li>@Html.ActionLink("Datele mele","Edit","User")</li>
                     }
 
                 </ul>

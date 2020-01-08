@@ -6,6 +6,20 @@
     .button-margin{
         padding-bottom:20px;
     }
+    .right{
+        position:absolute;
+        right:10px;
+    }
+    .right2{
+        position:absolute;
+        right:100px;
+    }
+    .verde{
+        margin-left:67%;
+    }
+    .albastru{
+        margin-left:60%;
+    }
 </style>
 
 <h2>@ViewBag.Title</h2>
@@ -18,11 +32,21 @@
 
 <div class="panel panel-success">
     <div class="panel-heading">
-    @ViewBag.Title
-        <div class="pull-right">
-            <a class="btn btn-sm btn-info" href="/Category/New">Adauga o noua categorie</a>
-            <a class="btn btn-sm btn-info" href="/News/Index">Lista articole</a>
+        <div class="row">
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                @ViewBag.Title
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                <a class="btn btn-sm btn-info" href="/Category/New">Adauga o noua categorie</a>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                <a class="btn btn-sm btn-info" href="/News/Index">Lista articole</a>
+            </div>
         </div>
+        
+
+    
+
     </div>
     <div class="panel-body">
         @foreach (var category in ViewBag.Categories)
@@ -31,10 +55,16 @@
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="panel panel-info">
                         <div class="panel-heading">
-                            @category.Name
-                            <div class="pull-right center-block">
-                                <a class="btn btn-sm btn-success" href="/Category/Show/@category.CategoryId">Afisare categorie</a>
-                                <a class="btn btn-sm btn-success" href="/Category/Edit/@category.CategoryId">Editare categorie</a>
+                            <div class="row">
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    @category.Name
+                                </div>
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                    <a class="btn btn-sm btn-success pull-left" href="/Category/Show/@category.CategoryId">Afisare categorie</a>
+                                </div>
+                                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                    <a class="btn btn-sm btn-success pull-right" href="/Category/Edit/@category.CategoryId">Editare categorie</a>
+                                </div>
                             </div>
                         </div>
                     </div>
