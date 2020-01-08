@@ -76,9 +76,7 @@ namespace NewsEngine2._0.Controllers
 
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
             ViewBag.News = paginatedArticles;
-<<<<<<< HEAD
-            
-=======
+
             ViewBag.Categories = db.Categories;
         
             return View();
@@ -173,7 +171,7 @@ namespace NewsEngine2._0.Controllers
             ViewBag.News = paginatedArticles;
             ViewBag.Categories = db.Categories;
             ViewBag.Id = id;
->>>>>>> 4478114607e71c83338ca643b41ab01650b67866
+
             return View();
         }
 
