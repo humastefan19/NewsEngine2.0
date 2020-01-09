@@ -22,12 +22,13 @@ namespace NewsEngine2._0.Models
         [Required(ErrorMessage ="Categoria este obligatorie")]
         public int CategoryId { get; set; } 
         public bool IsActive { get; set; }
+        public bool IsProposed { get; set; }
       
         public virtual ApplicationUser User { get; set; }
         public virtual Category Category { get; set; }
 
         public IEnumerable<SelectListItem> Categories { get; set; }
-        public IEnumerable<SelectListItem> Comments { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
         public IEnumerable<MediaDto> Media { get; set; }
         public IEnumerable<Media> Medias { get; set; }
     }

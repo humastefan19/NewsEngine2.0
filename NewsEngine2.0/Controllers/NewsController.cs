@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using NewsEngine2._0.Dto.MediaDto;
 using NewsEngine2._0.Models;
 using System;
@@ -19,16 +18,37 @@ namespace NewsEngine2._0.Controllers
 
         // GET: News
 
-        public ActionResult Index()
+        public ActionResult Index()//string searchBy, string searchString)
         {
             var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
+            //var news = from n in db.News
+            //           join u in db.Users on n.UserId equals u.Id
+            //           join c in db.Categories on n.CategoryId equals c.CategoryId
+            //           select n;
+
+            //if (!String.IsNullOrEmpty(searchString))
+            //{
+            //    if (searchBy == "Title")
+            //    {
+            //        news = news.Where(s => s.Title.Contains(searchString)).OrderByDescending(x => x.CreateDate);
+            //    }
+            //    else if (searchBy == "Content")
+            //    {
+            //        news = news.Where(s => s.Content.Contains(searchString)).OrderByDescending(x => x.CreateDate);
+            //    }
+            //}
+            //else
+            //{
+            //    news = news.OrderByDescending(x => x.CreateDate);
+            //}
+
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.message = TempData["message"].ToString();
             }
             List<MediaDto> medias = new List<MediaDto>();
 
-            foreach(News item in news)
+            foreach (News item in news)
             {
                 medias.Add(new MediaDto
                 {
@@ -42,7 +62,7 @@ namespace NewsEngine2._0.Controllers
             var currectPage = Convert.ToInt32(Request.Params.Get("page"));
 
             var offset = 0;
-            
+
 
             if (!currectPage.Equals(0))
             {
@@ -55,11 +75,53 @@ namespace NewsEngine2._0.Controllers
 
             ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
             ViewBag.News = paginatedArticles;
+
             ViewBag.Categories = db.Categories;
-        
+
             return View();
         }
+        public ActionResult IndexProposed()
+        {
+            var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
+          
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            List<MediaDto> medias = new List<MediaDto>();
 
+            foreach (News item in news)
+            {
+                medias.Add(new MediaDto
+                {
+                    News = item,
+                    Medias = db.Media.Where(x => x.NewsId == item.NewsId).ToList()
+                });
+            }
+
+            var totalItems = medias.Count();
+
+            var currectPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+
+            if (!currectPage.Equals(0))
+            {
+                offset = (currectPage - 1) * this._perPage;
+            }
+
+            var paginatedArticles = medias.Skip(offset).Take(this._perPage);
+            ViewBag.perPage = this._perPage;
+            ViewBag.total = totalItems;
+
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+            ViewBag.News = paginatedArticles;
+
+            ViewBag.Categories = db.Categories;
+
+            return View();
+        }
         public ActionResult IndexByCategory(int id)
         {
             var news = db.News.Include("User").Include("Category").Where(x => x.CategoryId == id).OrderByDescending(x => x.CreateDate);
@@ -101,19 +163,29 @@ namespace NewsEngine2._0.Controllers
             return View();
         }
 
+        public ActionResult AddToNews(int ?id)
+        {
+            News addNews = db.News.Find(id);
+            addNews.IsProposed = false;
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        
+
         public ActionResult IndexSorted(int id)
         {
 
             List<News> news = new List<News>();
-            if(id == 1)
+            if (id == 1)
             {
                 news = db.News.OrderBy(x => x.Title).ToList();
             }
-            else if(id == 2)
+            else if (id == 2)
             {
                 news = db.News.OrderByDescending(x => x.CreateDate).ToList();
             }
-            else if(id == 3)
+            else if (id == 3)
             {
                 news = db.News.OrderBy(x => x.CreateDate).ToList();
             }
@@ -149,6 +221,7 @@ namespace NewsEngine2._0.Controllers
             ViewBag.News = paginatedArticles;
             ViewBag.Categories = db.Categories;
             ViewBag.Id = id;
+
             return View();
         }
 
@@ -158,7 +231,7 @@ namespace NewsEngine2._0.Controllers
             if (User.IsInRole("Editor"))
             {
                 var userId = User.Identity.GetUserId();
-                var news = db.News.Include("User").Include("Category").Where(x=> x.UserId==userId);
+                var news = db.News.Include("User").Include("Category").Where(x => x.UserId == userId);
                 if (TempData.ContainsKey("message"))
                 {
                     ViewBag.message = TempData["message"].ToString();
@@ -203,12 +276,13 @@ namespace NewsEngine2._0.Controllers
         }
 
 
-        public ActionResult Show(int id)
+        public ActionResult Show(int? id)
         {
             News news = db.News.Find(id);
             news.Comments = GetAllComments(news.NewsId);
             var media = db.Media.Where(x => x.NewsId == id).ToArray();
             news.Medias = media;
+            ViewBag.Comments = GetAllComments(news.NewsId);
             return View(news);
         }
 
@@ -224,6 +298,44 @@ namespace NewsEngine2._0.Controllers
             return View(news);
 
 
+        }
+        public ActionResult NewProposed()
+        {
+            News propNews = new News();
+            propNews.CreateDate = DateTime.Now;
+            propNews.UserId = User.Identity.GetUserId();
+            propNews.IsProposed = true;
+            propNews.Categories = GetAllCategories();
+            return View(propNews);
+        }
+        [HttpPost]
+        public ActionResult NewProposed(News news)
+        {
+            Media img = new Media();
+            news.CreateDate = DateTime.Now;
+            news.UserId = User.Identity.GetUserId();
+            news.IsProposed = true;
+            news.Categories = GetAllCategories();
+            try
+            {
+
+                if (ModelState.IsValid)
+                {
+
+                    db.News.Add(news);
+                    db.SaveChanges();
+                    TempData["message"] = "Articolul a fost adaugat";
+                    return RedirectToAction("PhotoUpload");
+                }
+                else
+                {
+                    return View(news);
+                }
+            }
+            catch (Exception e)
+            {
+                return View(news);
+            }
         }
 
         [HttpPost]
@@ -256,11 +368,11 @@ namespace NewsEngine2._0.Controllers
             }
         }
 
-        [Authorize(Roles ="Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor")]
         public ActionResult PhotoUpload()
         {
-            
-            
+
+
             return View();
         }
         [HttpPost]
@@ -284,18 +396,18 @@ namespace NewsEngine2._0.Controllers
             }
             else
             {
-                return View(); 
+                return View();
             }
-            
+
         }
 
-        [Authorize (Roles ="Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor")]
         public ActionResult Edit(int id)
         {
             News news = db.News.Find(id);
             ViewBag.news = news;
             news.Categories = GetAllCategories();
-            if(news.UserId == User.Identity.GetUserId() || User.IsInRole("Adminisitrator"))
+            if (news.UserId == User.Identity.GetUserId() || User.IsInRole("Adminisitrator"))
             {
                 return View(news);
             }
@@ -304,10 +416,10 @@ namespace NewsEngine2._0.Controllers
                 TempData["message"] = "Nu aveti dreptul de a edita articolul";
                 return RedirectToAction("Index");
             }
-            
+
         }
 
-        [Authorize (Roles ="Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor")]
         [HttpPut]
         public ActionResult Edit(News editedNews)
         {
@@ -317,7 +429,7 @@ namespace NewsEngine2._0.Controllers
                 if (ModelState.IsValid)
                 {
                     News newsToEdit = db.News.Find(editedNews.NewsId);
-                    if(newsToEdit.UserId == User.Identity.GetUserId() ||
+                    if (newsToEdit.UserId == User.Identity.GetUserId() ||
                         User.IsInRole("Administrator"))
                     {
                         if (TryUpdateModel(newsToEdit))
@@ -342,23 +454,23 @@ namespace NewsEngine2._0.Controllers
                     return View(editedNews);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View(editedNews);
             }
         }
 
         [HttpDelete]
-        [Authorize (Roles = "Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor")]
         public ActionResult Delete(int id)
         {
             News news = db.News.Find(id);
-            if(news.UserId == User.Identity.GetUserId() ||
+            if (news.UserId == User.Identity.GetUserId() ||
                 User.IsInRole("Administrator") || User.IsInRole("Editor"))
             {
                 db.News.Remove(news);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexProposed");
             }
             else
             {
@@ -387,7 +499,7 @@ namespace NewsEngine2._0.Controllers
         [NonAction]
         public IEnumerable<SelectListItem> GetAllCategories()
         {
- 
+
             var selectList = new List<SelectListItem>();
             var categories = from cat in db.Categories
                              select cat;
@@ -403,30 +515,12 @@ namespace NewsEngine2._0.Controllers
         }
 
         [NonAction]
-        public IEnumerable<SelectListItem> GetAllComments(int newsId)
+        public IEnumerable<Comment> GetAllComments(int newsId)
         {
-            // generam o lista goala
-            var selectList = new List<SelectListItem>();
-
-            // Extragem toate categoriile din baza de date
-            var comments = db.Comments.Where(x => x.NewsId == newsId);
-
-            // iteram prin categorii
-            foreach (var comment in comments)
-            {
-                // Adaugam in lista elementele necesare pentru dropdown
-                selectList.Add(new SelectListItem
-                {
-                    Value = comment.CommentId.ToString(),
-                    Text = comment.Content.ToString()
-                });
-            }
-
-            // returnam lista de categorii
-            return selectList;
+            return db.Comments.Where(x => x.NewsId == newsId).ToList();
         }
 
-        
+
 
 
     }

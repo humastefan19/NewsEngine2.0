@@ -262,12 +262,17 @@
     <Content Include="Views\Shared\UserInfo.cshtml" />
     <Content Include="Views\Category\Show.cshtml" />
     <Content Include="Views\Category\Edit.cshtml" />
+    <Content Include="Views\Shared\Comment.cshtml" />
+    <Content Include="Views\Shared\CommentDetails.cshtml" />
+    <Content Include="Views\Comment\Edit.cshtml" />
+    <Content Include="Views\ProposedNews\New.cshtml" />
+    <Content Include="Views\ProposedNews\Index.cshtml" />
+    <Content Include="Views\News\NewProposed.cshtml" />
+    <Content Include="Views\News\IndexProposed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
-    <Folder Include="Views\Comment\" />
-    <Folder Include="Views\ProposedNews\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

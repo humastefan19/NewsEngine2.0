@@ -20,30 +20,31 @@ namespace NewsEngine2._0.Controllers
             return View();
         }
 
-        public ActionResult Edit(int commentId)
+
+        public ActionResult Edit(int id)
         {
-            Comment comment = db.Comments.Find(commentId);
+            Comment comment = db.Comments.Find(id);
             return View(comment);
         }
 
         [HttpPost]
         public ActionResult Edit(Comment editedComment)
         {
-            
+
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Comment commentToEdit = db.Comments.Find(editedComment.NewsId);
+                    Comment commentToEdit = db.Comments.Find(editedComment.CommentId);
                     if (commentToEdit.UserId == User.Identity.GetUserId())
                     {
                         if (TryUpdateModel(commentToEdit))
                         {
-                            commentToEdit.Content = editedComment.Content;
+                            commentToEdit.Description = editedComment.Description;
 
                             db.SaveChanges();
                         }
-                        return RedirectToAction("Show","News",editedComment.NewsId);
+                        return Redirect("http://localhost:53164/News/Show/" + commentToEdit.NewsId.ToString());
                     }
                     else
                     {
@@ -63,20 +64,17 @@ namespace NewsEngine2._0.Controllers
             }
         }
 
-        public ActionResult New(int newsId)
+        public ActionResult New(int? id)
         {
-
             Comment comment = new Comment();
-
-            comment.UserId = User.Identity.GetUserId();
-            comment.NewsId = newsId;
-
-            return View();
+            comment.NewsId = id.GetValueOrDefault();
+            return PartialView("Comment", comment);
         }
 
         [HttpPost]
         public ActionResult New(Comment newComment)
         {
+            newComment.UserId = User.Identity.GetUserId();
             try
             {
                 if (ModelState.IsValid)
@@ -84,7 +82,7 @@ namespace NewsEngine2._0.Controllers
                     db.Comments.Add(newComment);
                     db.SaveChanges();
                     TempData["message"] = "Comentariul a fost adaugat";
-                    return RedirectToAction("Show","News",newComment.NewsId);
+                    return Redirect("http://localhost:53164/News/Show/" + newComment.NewsId.ToString());
                 }
                 else
                 {
@@ -98,20 +96,21 @@ namespace NewsEngine2._0.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete(int commentId)
+        public ActionResult Delete(int ? id)
         {
-            Comment comment = db.Comments.Find(commentId);
+            Comment comment = db.Comments.Find(id);
             if (comment.UserId == User.Identity.GetUserId() ||
                 User.IsInRole("Administrator") || User.IsInRole("Editor"))
             {
+                var newsId = comment.NewsId.ToString();
                 db.Comments.Remove(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect("http://localhost:53164/News/Show/" + newsId);
             }
             else
             {
                 TempData["message"] = "Nu aveti dreptul sa stergeti un comentariu care nu va apartine!";
-                return RedirectToAction("Show","News", comment.NewsId);
+                return RedirectToAction("Show", "News", comment.NewsId);
             }
         }
     }
