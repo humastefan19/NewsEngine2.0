@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@model NewsEngine2._0.Models.Comment
+
+<form method="post" class="form-horizontal" action="/Comment/Edit">
+    @using (Html.BeginForm(actionName: "Edit", controllerName: "Comment"))
+    {
+
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        @Html.Hidden("NewsId", Model.NewsId);
+        @Html.Hidden("CommentId", Model.CommentId);
+        @Html.Label("Description", "Text comentariu")
+        <br />
+
+        @Html.TextBox("Description", Model.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Description, "", new { @class = "text-danger" })
+        <br /><br />
+
+        <button class="btn btn-success" type="submit">Editeaza comentariu</button>
+    }
+</form>

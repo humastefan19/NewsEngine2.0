@@ -20,9 +20,10 @@ namespace NewsEngine2._0.Controllers
             return View();
         }
 
-        public ActionResult Edit(int commentId)
+
+        public ActionResult Edit(int id)
         {
-            Comment comment = db.Comments.Find(commentId);
+            Comment comment = db.Comments.Find(id);
             return View(comment);
         }
 
@@ -34,7 +35,7 @@ namespace NewsEngine2._0.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Comment commentToEdit = db.Comments.Find(editedComment.NewsId);
+                    Comment commentToEdit = db.Comments.Find(editedComment.CommentId);
                     if (commentToEdit.UserId == User.Identity.GetUserId())
                     {
                         if (TryUpdateModel(commentToEdit))
@@ -43,7 +44,7 @@ namespace NewsEngine2._0.Controllers
 
                             db.SaveChanges();
                         }
-                        return RedirectToAction("Show", "News", editedComment.NewsId);
+                        return Redirect("http://localhost:53164/News/Show/" + commentToEdit.NewsId.ToString());
                     }
                     else
                     {
@@ -65,14 +66,8 @@ namespace NewsEngine2._0.Controllers
 
         public ActionResult New(int? id)
         {
-
             Comment comment = new Comment();
-
-
-
             comment.NewsId = id.GetValueOrDefault();
-
-
             return PartialView("Comment", comment);
         }
 
@@ -101,15 +96,16 @@ namespace NewsEngine2._0.Controllers
         }
 
         [HttpDelete]
-        public ActionResult Delete(int commentId)
+        public ActionResult Delete(int ? id)
         {
-            Comment comment = db.Comments.Find(commentId);
+            Comment comment = db.Comments.Find(id);
             if (comment.UserId == User.Identity.GetUserId() ||
                 User.IsInRole("Administrator") || User.IsInRole("Editor"))
             {
+                var newsId = comment.NewsId.ToString();
                 db.Comments.Remove(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return Redirect("http://localhost:53164/News/Show/" + newsId);
             }
             else
             {

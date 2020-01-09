@@ -23,8 +23,7 @@
         @if (ViewBag.Comments.Count != 0)
         {
             foreach (NewsEngine2._0.Models.Comment com in ViewBag.Comments)
-            {<h1>com.NewsId</h1>
-
+            { 
                 <div class=" panel panel-default">
 
                     @Html.Partial("CommentDetails", com)
