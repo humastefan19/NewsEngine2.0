@@ -9,11 +9,12 @@ using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace NewsEngine2._0.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+  
     public class UserController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
         // GET: User
+        [Authorize(Roles = "Administrator")]
         public ActionResult Index()
         {
             ViewBag.Users = db.Users;
@@ -24,7 +25,7 @@ namespace NewsEngine2._0.Controllers
 
             return View();
         }
-
+        [Authorize(Roles = "Administrator,Editor,User")]
         public ActionResult Show(string id)
         {
             ApplicationUser user = db.Users.Find(id);
@@ -32,7 +33,7 @@ namespace NewsEngine2._0.Controllers
         }
 
 
-
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(string id)
         {
             ApplicationUser user = db.Users.Find(id);
@@ -43,6 +44,7 @@ namespace NewsEngine2._0.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Edit(string id, ApplicationUser newData)
         {
             ApplicationUser user = db.Users.Find(id);
@@ -86,6 +88,7 @@ namespace NewsEngine2._0.Controllers
     
 
     [HttpDelete]
+        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(string id)
         {
             ApplicationUser user = db.Users.Find(id);

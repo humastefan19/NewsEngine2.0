@@ -19,7 +19,7 @@
             right: 0;
             left: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.4);
+            background: rgba(255,255,255,0.4);
         }
     .p-carousel {
         font-size: 25px;
@@ -35,8 +35,11 @@
         margin-left:20%;
         margin-right:20%;
     }
+    .h2-carousel{
+        color:rgba(0,0,0,1);
+    }
 </style>
-
+<br />
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
@@ -50,7 +53,8 @@
     <div class="carousel-inner">
 
         <div class="item active div-carousel" style="background-image:url('../Images/@ViewBag.First.Medias[0].Path')" >
-            <h2 class="text-center center">@ViewBag.First.News.Title</h2>
+            <h2 class="text-center center h2-carousel">@ViewBag.First.News.Title</h2>
+            <br />
             <p class="p-carousel truncate ">@ViewBag.First.News.Content</p>
             @*@if (ViewBag.First.Medias.Count > 0)
             {
@@ -60,7 +64,8 @@
         @foreach (NewsEngine2._0.Dto.MediaDto.MediaDto article in ViewBag.Article)
         {
             <div class="item div-carousel" style="background-image:url('../Images/@article.Medias[0].Path')">
-                <h2 class="text-center center">@article.News.Title</h2>
+                <h2 class="text-center center h2-carousel">@article.News.Title</h2>
+                <br />
                 <p class="p-carousel truncate">@article.News.Content</p>
                 @*@if (article.Medias.Count > 0)
                 {
