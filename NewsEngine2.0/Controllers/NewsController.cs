@@ -368,7 +368,7 @@ namespace NewsEngine2._0.Controllers
             }
         }
 
-        [Authorize(Roles = "Administrator,Editor")]
+        [Authorize(Roles = "Administrator,Editor,User")]
         public ActionResult PhotoUpload()
         {
 
@@ -376,6 +376,7 @@ namespace NewsEngine2._0.Controllers
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Administrator,Editor,User")]
         public ActionResult PhotoUpload(HttpPostedFileBase file)
         {
             Media photo = new Media();

@@ -32,9 +32,10 @@
                                 <li>@Html.ActionLink("Adaugare Articol", "New", "News")</li>
                                 <li>@Html.ActionLink("Utilizatori", "Index", "User")</li>
                                 <li>@Html.ActionLink("Categorii", "Index", "Category")</li>
-
+                                <li>@Html.ActionLink("Stiri propuse", "IndexProposed", "News")</li>
                             </ul>
                         </li>
+                        <li>@Html.ActionLink("Datele mele", "Edit", "User", new { id = User.Identity.GetUserId() }, null)</li>
 
                     }
                     @if (User.IsInRole("Editor"))
@@ -44,17 +45,19 @@
                             <ul class=" dropdown-menu">
                                 <li>@Html.ActionLink("Adaugare Articol", "New", "News")</li>
                                 <li>@Html.ActionLink("Articolele mele", "EditorIndex", "News")</li>
-
+                                <li>@Html.ActionLink("Stiri propuse", "IndexProposed", "News")</li>
 
                             </ul>
                         </li>
+                        <li>@Html.ActionLink("Datele mele", "Edit", "User", new { id = User.Identity.GetUserId() }, null)</li>
 
                     }
                     @if (User.IsInRole("User"))
                     {
 
-                        <li>@Html.ActionLink("Propune Stire", "New", "ProposedNews")</li>
-                        <li>@Html.ActionLink("Datele mele", "Edit", "User",new { id = User.Identity.GetUserId() },null)</li>
+                        <li>@Html.ActionLink("Propune Stire", "NewProposed", "News")</li>
+                        <li>@Html.ActionLink("Stirile mele propuse", "IndexProposed", "News")</li>
+                        <li>@Html.ActionLink("Datele mele", "Edit", "User", new { id = User.Identity.GetUserId() }, null)</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
