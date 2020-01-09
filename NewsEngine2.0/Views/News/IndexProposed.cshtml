@@ -50,18 +50,20 @@
                     </div>
                     @if (User.IsInRole("Administrator"))
                     {
-                        <div class="panel-footer">
+                    <div class="panel-footer">
 
-                            @using (Html.BeginForm(actionName: "Delete", controllerName: "News", method: FormMethod.Post, routeValues: new { id = item.News.NewsId }))
-                            {
+                        @using (Html.BeginForm(actionName: "Delete", controllerName: "News", method: FormMethod.Post, routeValues: new { id = item.News.NewsId }))
+                        {
 
-                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-                                <button class="btn btn-danger" type="submit">Sterge</button>
-                                <a class="btn btn-info" href="/News/Edit/@item.News.NewsId">Editeaza</a>
-                            }
+                            <button class="btn btn-danger" type="submit">Sterge</button>
+                            <a class="btn btn-info" href="/News/Edit/@item.News.NewsId">Editează</a>
+                            <a class="btn btn-info" href="/News/AddToNews/@item.News.NewsId">Acceptă</a>
+                            
+                        }
 
-                        </div>
+                    </div>
                     }
                 </div>
             }

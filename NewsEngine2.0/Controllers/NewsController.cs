@@ -171,6 +171,8 @@ namespace NewsEngine2._0.Controllers
             return RedirectToAction("Index");
         }
 
+        
+
         public ActionResult IndexSorted(int id)
         {
 
@@ -468,7 +470,7 @@ namespace NewsEngine2._0.Controllers
             {
                 db.News.Remove(news);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexProposed");
             }
             else
             {
