@@ -2,7 +2,6 @@
     ViewBag.Title = "Index";
 }
 
-
 <br />
 @if (TempData.ContainsKey("message"))
 {
@@ -26,7 +25,7 @@
 
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-      
+
         <div class="btn-group">
             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Sorteaza dupa <span class="caret"></span>
@@ -35,9 +34,9 @@
                 <li><a href="/News/IndexSorted/1">Alfabetic</a></li>
                 <li><a href="/News/IndexSorted/3">Crescator dupa data</a></li>
                 <li><a href="/News/IndexSorted/2">Descrescator dupa data</a></li>
-             
+
             </ul>
-        </div> 
+        </div>
     </div>
 </div>
 <br />
@@ -54,54 +53,6 @@
                 <div class="panel-body">
                     <div class="media">
                         @if (item.Medias.Count > 0)
-
-
-<div class="row">
-    <div class="col-lg-2 col-md-2">
-    </div>
-    <h2>Index</h2>
-    <div class="col-lg-2 col-md-2">
-    </div>
-    <p>
-        @using (Html.BeginForm("Index", "News", FormMethod.Get))
-        {
-            <b>Caută după:</b>@Html.RadioButton("searchBy", "Title") <text>Titlu</text>
-            @Html.RadioButton("searchBy", "Content") <text>Conținut</text>
-            @Html.TextBox("SearchString") <br />
-            <div class="col-lg-2 col-md-2">
-            </div>
-            <input type="submit" value="Caută" />
-        }
-    </p>
-
-
-</div>
-@foreach (NewsEngine2._0.Models.News item in ViewBag.News)
-{
-
-    <div class="row">
-        <div class="col-lg-2 col-md-2">
-        </div>
-        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-            <div class="panel panel-success">
-                <a href="/News/Show/@item.NewsId">
-
-                    <div class="panel-heading">@item.Title</div>
-                    <div class="panel-body">
-                        <p class="truncate text-justify"> @item.Content</p>
-                    </div>
-                </a>
-                <div class="panel-footer">
-                    
-
-
-
-                    @if (User.IsInRole("Administrator"))
-                    {
-
-
-                        using (Html.BeginForm(actionName: "Delete", controllerName: "News", method: FormMethod.Post, routeValues: new { id = item.NewsId }))
-
                         {
                             <div class="media-left media-middle">
                                 <a href="#">
@@ -116,31 +67,20 @@
                 </div>
                 @if (User.IsInRole("Administrator"))
                 {
-                <div class="panel-footer">
+                    <div class="panel-footer">
 
-                    @using (Html.BeginForm(actionName: "Delete", controllerName: "News", method: FormMethod.Post, routeValues: new { id = item.News.NewsId }))
-                    {
+                        @using (Html.BeginForm(actionName: "Delete", controllerName: "News", method: FormMethod.Post, routeValues: new { id = item.News.NewsId }))
+                        {
 
-                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                            @Html.HttpMethodOverride(HttpVerbs.Delete)
 
-
-                        <button class="btn btn-danger" type="submit">Sterge</button>
-                        <a class="btn btn-info" href="/News/Edit/@item.News.NewsId">Editeaza</a>
-
+                            <button class="btn btn-danger" type="submit">Sterge</button>
+                            <a class="btn btn-info" href="/News/Edit/@item.News.NewsId">Editeaza</a>
                         }
 
-
-
-                </div>
-
+                    </div>
                 }
             </div>
-
-
-            </div>
-
-        </div>
-        <div class="col-lg-2 col-md-2">
 
         </div>
 
@@ -173,14 +113,4 @@
     </div>
     <div class="col-lg-2 col-md-2">
     </div>
-
 </div>
-
-
-
-
-
-
-
-</div>
-
