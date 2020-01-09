@@ -18,29 +18,24 @@ namespace NewsEngine2._0.Controllers
 
         // GET: News
 
-        public ActionResult Index()//string searchBy, string searchString)
+        public ActionResult Index(string searchString)
         {
-            var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
-            //var news = from n in db.News
-            //           join u in db.Users on n.UserId equals u.Id
-            //           join c in db.Categories on n.CategoryId equals c.CategoryId
-            //           select n;
+            //var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
+            var news = from n in db.News
+                       join u in db.Users on n.UserId equals u.Id
+                       join c in db.Categories on n.CategoryId equals c.CategoryId
+                       select n;
 
-            //if (!String.IsNullOrEmpty(searchString))
-            //{
-            //    if (searchBy == "Title")
-            //    {
-            //        news = news.Where(s => s.Title.Contains(searchString)).OrderByDescending(x => x.CreateDate);
-            //    }
-            //    else if (searchBy == "Content")
-            //    {
-            //        news = news.Where(s => s.Content.Contains(searchString)).OrderByDescending(x => x.CreateDate);
-            //    }
-            //}
-            //else
-            //{
-            //    news = news.OrderByDescending(x => x.CreateDate);
-            //}
+            if (!String.IsNullOrEmpty(searchString))
+            {
+
+                news = news.Where(s => s.Content.Contains(searchString) || s.Title.Contains(searchString)).OrderByDescending(x => x.CreateDate);
+            }
+        
+            else
+            {
+                news = news.OrderByDescending(x => x.CreateDate);
+            }
 
             if (TempData.ContainsKey("message"))
             {
