@@ -21,13 +21,13 @@ namespace NewsEngine2._0.Controllers
          
         public ActionResult Index()
         {
-            var first = db.News.OrderByDescending(x => x.CreateDate).FirstOrDefault();
+            var first = db.News.Where(p => p.IsProposed.Equals(false)).OrderByDescending(x => x.CreateDate).FirstOrDefault();
             ViewBag.First = new MediaDto
             {
                 News = first,
                 Medias = db.Media.Where(x => x.NewsId == first.NewsId).ToList()
             };
-            var news = db.News.OrderByDescending(x => x.CreateDate).Skip(1).Take(3);
+            var news = db.News.Where(p => p.IsProposed.Equals(false)).OrderByDescending(x => x.CreateDate).Skip(1).Take(3);
             List<MediaDto> article = new List<MediaDto>();
             foreach(News item in news)
             {
