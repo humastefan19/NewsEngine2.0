@@ -17,7 +17,7 @@ namespace NewsEngine2._0.Controllers
         {
             if (User.IsInRole("Editor") || User.IsInRole("Admin"))
             {
-                var propNews = db.ProposedNews.Include("Category");
+                var propNews = db.News.Include("Category");
                 if (TempData.ContainsKey("message"))
                 {
                     ViewBag.message = TempData["message"].ToString();
@@ -29,7 +29,7 @@ namespace NewsEngine2._0.Controllers
 
             else
             {
-                var userPropNews = db.ProposedNews.Include("Category").Where(x => x.UserId == User.Identity.GetUserId());
+                var userPropNews = db.News.Include("Category").Where(x => x.UserId == User.Identity.GetUserId());
                 ViewBag.ProposedNews = userPropNews;
                 return View();
             }
@@ -37,13 +37,14 @@ namespace NewsEngine2._0.Controllers
 
         public ActionResult New()
         {
-            ProposedNews propNews = new ProposedNews();
+            News propNews = new News();
+            propNews.IsActive = true;
             propNews.Categories = GetAllCategories();
             return View(propNews);
         }
 
         [HttpPost]
-        public ActionResult New(ProposedNews news)
+        public ActionResult New(News news)
         {
             news.Categories = GetAllCategories();
             if (User.IsInRole("User"))
@@ -52,7 +53,7 @@ namespace NewsEngine2._0.Controllers
                 {
                     if (ModelState.IsValid)
                     {
-                        db.ProposedNews.Add(news);
+                        db.News.Add(news);
                         db.SaveChanges();
                         TempData["message"] = "Stirea a fost propusa cu succes";
                         return RedirectToAction("Index");
@@ -77,59 +78,14 @@ namespace NewsEngine2._0.Controllers
         }
 
 
-        public ActionResult Edit(int id)
-        {
-            ProposedNews propNews = db.ProposedNews.Find(id);
-            propNews.Categories = GetAllCategories();
-            return View(propNews);
-        }
-
-        [HttpPut]
-        public ActionResult Edit(int id, ProposedNews requestNews)
-        {
-            requestNews.Categories = GetAllCategories();
-            if (User.IsInRole("User"))
-            {
-
-                try
-                {
-                    if (ModelState.IsValid)
-                    {
-                        ProposedNews news = db.ProposedNews.Find(id);
-                        if (TryUpdateModel(news))
-                        {
-                            news.Title = requestNews.Title;
-                            news.Content = requestNews.Content;
-                            news.CreatedDate = requestNews.CreatedDate;
-                            news.CategoryId = requestNews.CategoryId;
-                            db.SaveChanges();
-                            TempData["message"] = "Articolul a fost modificat!";
-                        }
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        return View(requestNews);
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    return View(requestNews);
-                }
-            }
-            else
-            {
-                TempData["message"] = "Articolul poate fi editat doar de user";
-                return RedirectToAction("Index");
-            }
-        }
+      
+       
 
         [HttpDelete]
         public ActionResult Delete(int id)
         {
-            ProposedNews propNews = db.ProposedNews.Find(id);
-            db.ProposedNews.Remove(propNews);
+            News propNews = db.News.Find(id);
+            db.News.Remove(propNews);
             TempData["message"] = "Propunerea a fost stearsa!";
             db.SaveChanges();
             return RedirectToAction("Index");

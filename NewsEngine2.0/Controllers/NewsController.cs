@@ -80,7 +80,48 @@ namespace NewsEngine2._0.Controllers
 
             return View();
         }
+        public ActionResult IndexProposed()
+        {
+            var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
+          
+            if (TempData.ContainsKey("message"))
+            {
+                ViewBag.message = TempData["message"].ToString();
+            }
+            List<MediaDto> medias = new List<MediaDto>();
 
+            foreach (News item in news)
+            {
+                medias.Add(new MediaDto
+                {
+                    News = item,
+                    Medias = db.Media.Where(x => x.NewsId == item.NewsId).ToList()
+                });
+            }
+
+            var totalItems = medias.Count();
+
+            var currectPage = Convert.ToInt32(Request.Params.Get("page"));
+
+            var offset = 0;
+
+
+            if (!currectPage.Equals(0))
+            {
+                offset = (currectPage - 1) * this._perPage;
+            }
+
+            var paginatedArticles = medias.Skip(offset).Take(this._perPage);
+            ViewBag.perPage = this._perPage;
+            ViewBag.total = totalItems;
+
+            ViewBag.lastPage = Math.Ceiling((float)totalItems / (float)this._perPage);
+            ViewBag.News = paginatedArticles;
+
+            ViewBag.Categories = db.Categories;
+
+            return View();
+        }
         public ActionResult IndexByCategory(int id)
         {
             var news = db.News.Include("User").Include("Category").Where(x => x.CategoryId == id).OrderByDescending(x => x.CreateDate);
@@ -120,6 +161,14 @@ namespace NewsEngine2._0.Controllers
             ViewBag.Categories = db.Categories;
             ViewBag.Id = id;
             return View();
+        }
+
+        public ActionResult AddToNews(int ?id)
+        {
+            News addNews = db.News.Find(id);
+            addNews.IsProposed = false;
+            db.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         public ActionResult IndexSorted(int id)
@@ -247,6 +296,44 @@ namespace NewsEngine2._0.Controllers
             return View(news);
 
 
+        }
+        public ActionResult NewProposed()
+        {
+            News propNews = new News();
+            propNews.CreateDate = DateTime.Now;
+            propNews.UserId = User.Identity.GetUserId();
+            propNews.IsProposed = true;
+            propNews.Categories = GetAllCategories();
+            return View(propNews);
+        }
+        [HttpPost]
+        public ActionResult NewProposed(News news)
+        {
+            Media img = new Media();
+            news.CreateDate = DateTime.Now;
+            news.UserId = User.Identity.GetUserId();
+            news.IsProposed = true;
+            news.Categories = GetAllCategories();
+            try
+            {
+
+                if (ModelState.IsValid)
+                {
+
+                    db.News.Add(news);
+                    db.SaveChanges();
+                    TempData["message"] = "Articolul a fost adaugat";
+                    return RedirectToAction("PhotoUpload");
+                }
+                else
+                {
+                    return View(news);
+                }
+            }
+            catch (Exception e)
+            {
+                return View(news);
+            }
         }
 
         [HttpPost]

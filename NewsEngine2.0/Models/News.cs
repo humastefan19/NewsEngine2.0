@@ -22,6 +22,7 @@ namespace NewsEngine2._0.Models
         [Required(ErrorMessage ="Categoria este obligatorie")]
         public int CategoryId { get; set; } 
         public bool IsActive { get; set; }
+        public bool IsProposed { get; set; }
       
         public virtual ApplicationUser User { get; set; }
         public virtual Category Category { get; set; }

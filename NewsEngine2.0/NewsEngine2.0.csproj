@@ -266,6 +266,9 @@
     <Content Include="Views\Shared\CommentDetails.cshtml" />
     <Content Include="Views\Comment\Edit.cshtml" />
     <Content Include="Views\ProposedNews\New.cshtml" />
+    <Content Include="Views\ProposedNews\Index.cshtml" />
+    <Content Include="Views\News\NewProposed.cshtml" />
+    <Content Include="Views\News\IndexProposed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
