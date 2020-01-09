@@ -14,7 +14,7 @@ namespace NewsEngine2._0.Models
         public string UserId { get; set; }
         public int NewsId { get; set; }
         [Required (ErrorMessage ="Continutul comentariului este obligatoriu")]
-        public string Content { get; set; }
+        public string Description { get; set; }
 
         public virtual ApplicationUser User { get; set; }
         public virtual News News { get; set; }
