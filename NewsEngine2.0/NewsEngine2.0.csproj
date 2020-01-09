@@ -249,14 +249,11 @@
     <Content Include="Views\News\New.cshtml" />
     <Content Include="Views\Category\New.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\ProposedNews\New.cshtml" />
     <Content Include="Views\ProposedNews\Index.cshtml" />
-=======
     <Content Include="Views\News\PhotoUpload.cshtml" />
     <Content Include="Views\News\EditorIndex.cshtml" />
     <Content Include="Views\News\Show.cshtml" />
->>>>>>> e73f4497f08ca1144bb4c999469ce9356fed7972
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

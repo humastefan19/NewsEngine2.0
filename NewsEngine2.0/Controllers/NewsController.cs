@@ -20,13 +20,9 @@ namespace NewsEngine2._0.Controllers
 
         public ActionResult Index()
         {
-<<<<<<< HEAD
-            ViewBag.News = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
-            if(TempData.ContainsKey("message"))
-=======
             var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
             if (TempData.ContainsKey("message"))
->>>>>>> e73f4497f08ca1144bb4c999469ce9356fed7972
+
             {
                 ViewBag.message = TempData["message"].ToString();
             }
@@ -114,12 +110,8 @@ namespace NewsEngine2._0.Controllers
         [Authorize(Roles = "Administrator,Editor")]
         public ActionResult New(News news)
         {
-<<<<<<< HEAD
+
             news.CreateDate = DateTime.Now ;
-=======
-            Media img = new Media();
-            news.CreateDate = DateTime.Today;
->>>>>>> e73f4497f08ca1144bb4c999469ce9356fed7972
             news.UserId = User.Identity.GetUserId();
             news.Categories = GetAllCategories();
             try

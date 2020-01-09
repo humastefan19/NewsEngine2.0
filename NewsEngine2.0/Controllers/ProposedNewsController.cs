@@ -15,7 +15,7 @@ namespace NewsEngine2._0.Controllers
     public class ProposedNewsController : Controller
     {
         ApplicationDbContext db = new ApplicationDbContext();
-        private ApplicationUserManager userManager = new ApplicationUserManager();
+        private ApplicationUserManager userManager;
         public ProposedNewsController(){}
         public ProposedNewsController(ApplicationUserManager _userManager){
             userManager = _userManager;
