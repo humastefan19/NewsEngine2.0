@@ -18,7 +18,7 @@ namespace NewsEngine2._0.Controllers
 
         // GET: News
 
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string search)
         {
             //var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
             var news = from n in db.News
@@ -26,10 +26,10 @@ namespace NewsEngine2._0.Controllers
                        join c in db.Categories on n.CategoryId equals c.CategoryId
                        select n;
 
-            if (!String.IsNullOrEmpty(searchString))
+            if (!String.IsNullOrEmpty( search))
             {
 
-                news = news.Where(s => s.Content.Contains(searchString) || s.Title.Contains(searchString)).OrderByDescending(x => x.CreateDate);
+                news = news.Where(s => s.Content.Contains(search) || s.Title.Contains(search)).OrderByDescending(x => x.CreateDate);
             }
         
             else
@@ -73,7 +73,7 @@ namespace NewsEngine2._0.Controllers
 
             ViewBag.Categories = db.Categories;
 
-            return View();
+            return View(news);
         }
         public ActionResult IndexProposed()
         {
