@@ -171,7 +171,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
-    <Compile Include="Controllers\ProposedNewsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Dto\MediaDto\MediaDto.cs" />
     <Compile Include="Dto\NewsDto\NewsFilter.cs" />
@@ -186,7 +185,6 @@
     <Compile Include="Models\Media.cs" />
     <Compile Include="Models\MediaType.cs" />
     <Compile Include="Models\News.cs" />
-    <Compile Include="Models\ProposedNews.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -265,8 +263,6 @@
     <Content Include="Views\Shared\Comment.cshtml" />
     <Content Include="Views\Shared\CommentDetails.cshtml" />
     <Content Include="Views\Comment\Edit.cshtml" />
-    <Content Include="Views\ProposedNews\New.cshtml" />
-    <Content Include="Views\ProposedNews\Index.cshtml" />
     <Content Include="Views\News\NewProposed.cshtml" />
     <Content Include="Views\News\IndexProposed.cshtml" />
   </ItemGroup>

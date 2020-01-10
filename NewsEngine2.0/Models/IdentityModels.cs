@@ -39,6 +39,6 @@ namespace NewsEngine2._0.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Media> Media { get; set; }
         public DbSet<MediaType> MediaTypes { get; set; }
-        public DbSet<ProposedNews> ProposedNews { get; set; }
+       
     }
 }

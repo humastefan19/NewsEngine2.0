@@ -20,7 +20,7 @@ namespace NewsEngine2._0.Controllers
 
         public ActionResult Index(string search)
         {
-            //var news = db.News.Include("User").Include("Category").OrderByDescending(x => x.CreateDate);
+            
             var news = from n in db.News
                        join u in db.Users on n.UserId equals u.Id
                        join c in db.Categories on n.CategoryId equals c.CategoryId
